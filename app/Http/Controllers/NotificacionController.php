@@ -7,59 +7,52 @@ use Illuminate\Http\Request;
 
 class NotificacionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return response()->json(Notificacion::with(['usuario', 'administrador'])->paginate(15));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'titulo' => ['required', 'string', 'max:255'],
+            'mensaje' => ['required', 'string'],
+            'fechaEnvio' => ['required', 'date'],
+            'leida' => ['sometimes', 'boolean'],
+            'idUsuario' => ['required', 'exists:usuarios,idUsuario'],
+            'idAdmin' => ['required', 'exists:administradores,idAdmin'],
+        ]);
+
+        $notificacion = Notificacion::create($validated);
+
+        return response()->json($notificacion->load(['usuario', 'administrador']), 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Notificacion $notificacion)
     {
-        //
+        return response()->json($notificacion->load(['usuario', 'administrador']));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Notificacion $notificacion)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Notificacion $notificacion)
     {
-        //
+        $validated = $request->validate([
+            'titulo' => ['sometimes', 'required', 'string', 'max:255'],
+            'mensaje' => ['sometimes', 'required', 'string'],
+            'fechaEnvio' => ['sometimes', 'required', 'date'],
+            'leida' => ['sometimes', 'boolean'],
+            'idUsuario' => ['sometimes', 'required', 'exists:usuarios,idUsuario'],
+            'idAdmin' => ['sometimes', 'required', 'exists:administradores,idAdmin'],
+        ]);
+
+        $notificacion->update($validated);
+
+        return response()->json($notificacion->load(['usuario', 'administrador']));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Notificacion $notificacion)
     {
-        //
+        $notificacion->delete();
+
+        return response()->json(['message' => 'Notificación eliminada correctamente']);
     }
 }

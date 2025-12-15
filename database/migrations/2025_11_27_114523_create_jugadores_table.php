@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('jugadores', function (Blueprint $table) {
-            $table->id();
-            $table->integer('dorsal');
-            $table->string('posicion');
-            $table->foreignId('idUsuario')->constrained('usuarios', 'idUsuario');
-            $table->foreignId('IdEquipo')->constrained('equipos', 'IdEquipo');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('jugadores')) {
+            Schema::create('jugadores', function (Blueprint $table) {
+                $table->id();
+                $table->integer('dorsal');
+                $table->string('posicion');
+                $table->foreignId('idUsuario')->constrained('usuarios', 'idUsuario');
+                $table->foreignId('IdEquipo')->constrained('equipos', 'IdEquipo');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

@@ -4,62 +4,55 @@ namespace App\Http\Controllers;
 
 use App\Models\Administrador;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class AdministradorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return response()->json(Administrador::with('usuario')->paginate(15));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'telefonoContacto' => ['required', 'string', 'max:255'],
+            'organizacion' => ['required', 'string', 'max:255'],
+            'idUsuario' => ['required', 'exists:usuarios,idUsuario', 'unique:administradores,idUsuario'],
+        ]);
+
+        $administrador = Administrador::create($validated);
+
+        return response()->json($administrador->load('usuario'), 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Administrador $administrador)
     {
-        //
+        return response()->json($administrador->load(['usuario', 'torneos', 'notificaciones']));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Administrador $administrador)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Administrador $administrador)
     {
-        //
+        $validated = $request->validate([
+            'telefonoContacto' => ['sometimes', 'required', 'string', 'max:255'],
+            'organizacion' => ['sometimes', 'required', 'string', 'max:255'],
+            'idUsuario' => [
+                'sometimes',
+                'required',
+                'exists:usuarios,idUsuario',
+                Rule::unique('administradores', 'idUsuario')->ignore($administrador->idAdmin, 'idAdmin'),
+            ],
+        ]);
+
+        $administrador->update($validated);
+
+        return response()->json($administrador->load('usuario'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Administrador $administrador)
     {
-        //
+        $administrador->delete();
+
+        return response()->json(['message' => 'Administrador eliminado correctamente']);
     }
 }
