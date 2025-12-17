@@ -4,62 +4,56 @@ namespace App\Http\Controllers;
 
 use App\Models\Secuencia;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class SecuenciaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return response()->json(Secuencia::paginate(15));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'nombre' => ['required', 'string', 'max:255', 'unique:secuencias,nombre'],
+            'descripcion' => ['nullable', 'string', 'max:500'],
+            'valor' => ['nullable', 'integer', 'min:0'],
+        ]);
+
+        $secuencia = Secuencia::create($validated);
+
+        return response()->json($secuencia, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Secuencia $secuencia)
     {
-        //
+        return response()->json($secuencia);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Secuencia $secuencia)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Secuencia $secuencia)
     {
-        //
+        $validated = $request->validate([
+            'nombre' => [
+                'sometimes',
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('secuencias', 'nombre')->ignore($secuencia->idSecuencia, 'idSecuencia'),
+            ],
+            'descripcion' => ['sometimes', 'nullable', 'string', 'max:500'],
+            'valor' => ['sometimes', 'required', 'integer', 'min:0'],
+        ]);
+
+        $secuencia->update($validated);
+
+        return response()->json($secuencia);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Secuencia $secuencia)
     {
-        //
+        $secuencia->delete();
+
+        return response()->json(['message' => 'Secuencia eliminada correctamente']);
     }
 }
