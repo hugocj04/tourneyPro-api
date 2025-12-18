@@ -9,7 +9,7 @@ class EquipoController extends Controller
 {
     public function index()
     {
-        return response()->json(Equipo::paginate(15));
+        return response()->json(Equipo::all());
     }
 
     public function store(Request $request)

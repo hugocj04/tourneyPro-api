@@ -17,13 +17,11 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('usuarios', UsuarioController::class);
-    Route::apiResource('administradores', AdministradorController::class);
-    Route::apiResource('equipos', EquipoController::class);
-    Route::apiResource('torneos', TorneoController::class);
-    Route::apiResource('jugadores', JugadorController::class);
-    Route::apiResource('clasificaciones', ClasificacionController::class);
-    Route::apiResource('partidos', PartidoController::class);
-    Route::apiResource('notificaciones', NotificacionController::class);
-});
+Route::apiResource('usuarios', UsuarioController::class);
+Route::apiResource('administradores', AdministradorController::class);
+Route::apiResource('equipos', EquipoController::class);
+Route::apiResource('torneos', TorneoController::class);
+Route::apiResource('jugadores', JugadorController::class);
+Route::apiResource('clasificaciones', ClasificacionController::class);
+Route::apiResource('partidos', PartidoController::class);
+Route::apiResource('notificaciones', NotificacionController::class);
