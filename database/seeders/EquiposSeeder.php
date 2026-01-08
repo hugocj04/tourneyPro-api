@@ -15,25 +15,25 @@ class EquiposSeeder extends Seeder
     {
         Equipo::create([
             'nombre' => 'Real Madrid',
-            'logo' => 'real_madrid.png',
+            'logo' => 'https://logodownload.org/wp-content/uploads/2016/03/real-madrid-logo-0.png',
             'categoria' => 'Senior',
         ]);
 
         Equipo::create([
             'nombre' => 'FC Barcelona',
-            'logo' => 'barcelona.png',
+            'logo' => 'https://upload.wikimedia.org/wikipedia/sco/thumb/4/47/FC_Barcelona_%28crest%29.svg/1010px-FC_Barcelona_%28crest%29.svg.png',
             'categoria' => 'Senior',
         ]);
 
         Equipo::create([
             'nombre' => 'Atlético Madrid',
-            'logo' => 'atletico.png',
+            'logo' => 'https://logodownload.org/wp-content/uploads/2017/02/atletico-madrid-logo-0.png',
             'categoria' => 'Senior',
         ]);
 
         Equipo::create([
             'nombre' => 'Valencia CF',
-            'logo' => 'valencia.png',
+            'logo' => 'https://assets.football-logos.cc/logos/spain/700x700/valencia.b55bb96d.png',
             'categoria' => 'Senior',
         ]);
     }
