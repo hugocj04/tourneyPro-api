@@ -3,15 +3,20 @@
 namespace App\Models;
 
 use App\Models\Administrador;
+use App\Models\Cliente;
 use App\Models\Jugador;
 use App\Models\Notificacion;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-class Usuario extends Model
+class Usuario extends Authenticatable
 {
+    use HasApiTokens, HasFactory, Notifiable;
+
     protected $table = 'usuarios';
 
     protected $primaryKey = 'idUsuario';
@@ -24,25 +29,32 @@ class Usuario extends Model
         'fechaRegistro',
     ];
 
-    protected $hidden = ['contraseña'];
+    protected $hidden = ['contraseña', 'remember_token'];
 
     protected $casts = [
         'fechaRegistro' => 'date',
+        'email_verified_at' => 'datetime',
+        'contraseña' => 'hashed',
     ];
 
-    protected static function booted(): void
+    public function getAuthPasswordName()
     {
-        static::saving(function (Usuario $usuario): void {
-            // Hash password when creating or updating
-            if ($usuario->isDirty('contraseña')) {
-                $usuario->contraseña = Hash::make($usuario->contraseña);
-            }
-        });
+        return 'contraseña';
+    }
+
+    public function getAuthPassword()
+    {
+        return $this->contraseña;
     }
 
     public function administrador(): HasOne
     {
         return $this->hasOne(Administrador::class, 'idUsuario', 'idUsuario');
+    }
+
+    public function cliente(): HasOne
+    {
+        return $this->hasOne(Cliente::class, 'idUsuario', 'idUsuario');
     }
 
     public function notificaciones(): HasMany

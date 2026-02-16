@@ -10,9 +10,6 @@ use App\Models\Torneo;
 
 class ClasificacionesSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $equipos = Equipo::all();

@@ -9,48 +9,13 @@ use Illuminate\Support\Facades\Hash;
 
 class UsuariosSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         Usuario::create([
-            'nombre' => 'Juan',
-            'apellidos' => 'García Pérez',
-            'email' => 'juan.garcia@example.com',
-            'contraseña' => Hash::make('password123'),
-            'fechaRegistro' => now(),
-        ]);
-
-        Usuario::create([
-            'nombre' => 'María',
-            'apellidos' => 'López Martínez',
-            'email' => 'maria.lopez@example.com',
-            'contraseña' => Hash::make('password123'),
-            'fechaRegistro' => now(),
-        ]);
-
-        Usuario::create([
-            'nombre' => 'Carlos',
-            'apellidos' => 'Rodríguez Sánchez',
-            'email' => 'carlos.rodriguez@example.com',
-            'contraseña' => Hash::make('password123'),
-            'fechaRegistro' => now(),
-        ]);
-
-        Usuario::create([
-            'nombre' => 'Ana',
-            'apellidos' => 'Fernández Gómez',
-            'email' => 'ana.fernandez@example.com',
-            'contraseña' => Hash::make('password123'),
-            'fechaRegistro' => now(),
-        ]);
-
-        Usuario::create([
-            'nombre' => 'Pedro',
-            'apellidos' => 'Martín Díaz',
-            'email' => 'pedro.martin@example.com',
-            'contraseña' => Hash::make('password123'),
+            'nombre' => 'Admin',
+            'apellidos' => 'Principal',
+            'email' => 'admin@tourneypro.com',
+            'contraseña' => '1234',
             'fechaRegistro' => now(),
         ]);
     }

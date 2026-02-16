@@ -8,9 +8,6 @@ use App\Models\Equipo;
 
 class EquiposSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         Equipo::create([

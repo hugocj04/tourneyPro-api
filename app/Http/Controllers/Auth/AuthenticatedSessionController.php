@@ -7,33 +7,32 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Handle an incoming authentication request.
-     */
     public function store(LoginRequest $request): Response
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+        $credentials = [
+            'email' => $request->email,
+            'password' => $request->password,
+        ];
 
         if (! Auth::attempt($credentials)) {
             return response(['message' => 'Invalid credentials'], 422);
         }
 
         $token = $request->user()->createToken('api')->plainTextToken;
+
+        $isAdmin = DB::table('administradores')->where('idUsuario', $request->user()->idUsuario)->exists();
+
         return response([
             'token' => $token,
             'user'  => $request->user(),
+            'isAdmin' => $isAdmin,
         ], 200);
     }
 
-    /**
-     * Destroy an authenticated session.
-     */
     public function destroy(Request $request): Response
     {
         Auth::guard('web')->logout();

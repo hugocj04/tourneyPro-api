@@ -10,9 +10,6 @@ use App\Models\Administrador;
 
 class NotificacionesSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $usuarios = Usuario::all();

@@ -9,9 +9,6 @@ use App\Models\Administrador;
 
 class TorneosSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $admin = Administrador::first();
