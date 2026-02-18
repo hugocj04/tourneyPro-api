@@ -1,0 +1,219 @@
+### ============================================
+### API Tests - Gestor de Torneos de Fútbol
+### ============================================
+### Instala la extensión "REST Client" en VS Code para usar este archivo
+### Click en "Send Request" sobre cada petición
+
+@baseUrl = http://127.0.0.1:8000/api
+@token = your_token_here
+
+### ============================================
+### 1. REGISTRO - Crear nuevo usuario
+### ============================================
+POST {{baseUrl}}/register
+Content-Type: application/json
+
+{
+  "nombre": "Carlos",
+  "apellidos": "Martínez",
+  "telefono": "612345678",
+  "email": "carlos@example.com",
+  "password": "12345678",
+  "password_confirmation": "12345678"
+}
+
+### ============================================
+### 2. LOGIN - Obtener token
+### ============================================
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "admin@tourneypro.com",
+  "password": "1234"
+}
+
+### ============================================
+### 3. LOGIN - Usuario normal
+### ============================================
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "carlos@example.com",
+  "password": "12345678"
+}
+
+### ============================================
+### 4. VER MI PERFIL
+### ============================================
+GET {{baseUrl}}/user
+Authorization: Bearer {{token}}
+
+### ============================================
+### 5. LISTAR MIS TORNEOS
+### ============================================
+# Admin ve todos, usuario solo los suyos
+GET {{baseUrl}}/torneos
+Authorization: Bearer {{token}}
+
+### ============================================
+### 6. CREAR TORNEO
+### ============================================
+POST {{baseUrl}}/torneos
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nombre": "Copa Primavera 2026",
+  "deporte": "Fútbol",
+  "categoria": "Senior",
+  "formato": "Liga",
+  "fechaInicio": "2026-03-01",
+  "fechaFin": "2026-05-30",
+  "estado": "Inscripcion"
+}
+
+### ============================================
+### 7. VER TORNEO ESPECÍFICO (ID: 1)
+### ============================================
+GET {{baseUrl}}/torneos/1
+Authorization: Bearer {{token}}
+
+### ============================================
+### 8. EDITAR TORNEO (ID: 1)
+### ============================================
+PUT {{baseUrl}}/torneos/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "estado": "En Curso",
+  "nombre": "Copa Primavera 2026 - Actualizado"
+}
+
+### ============================================
+### 9. ELIMINAR TORNEO (ID: 1)
+### ============================================
+DELETE {{baseUrl}}/torneos/1
+Authorization: Bearer {{token}}
+
+### ============================================
+### 10. LISTAR EQUIPOS
+### ============================================
+GET {{baseUrl}}/equipos
+Authorization: Bearer {{token}}
+
+### ============================================
+### 11. CREAR EQUIPO
+### ============================================
+POST {{baseUrl}}/equipos
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nombre": "Athletic Bilbao",
+  "logo": "https://example.com/logo.png",
+  "categoria": "Senior"
+}
+
+### ============================================
+### 12. VER EQUIPO ESPECÍFICO (ID: 1)
+### ============================================
+GET {{baseUrl}}/equipos/1
+Authorization: Bearer {{token}}
+
+### ============================================
+### 13. EDITAR EQUIPO (ID: 1)
+### ============================================
+PUT {{baseUrl}}/equipos/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nombre": "Athletic Club"
+}
+
+### ============================================
+### 14. LISTAR JUGADORES
+### ============================================
+GET {{baseUrl}}/jugadores
+Authorization: Bearer {{token}}
+
+### ============================================
+### 15. CREAR JUGADOR
+### ============================================
+POST {{baseUrl}}/jugadores
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "dorsal": 10,
+  "posicion": "Delantero",
+  "idUsuario": 1,
+  "idEquipo": 1
+}
+
+### ============================================
+### 16. LISTAR PARTIDOS
+### ============================================
+GET {{baseUrl}}/partidos
+Authorization: Bearer {{token}}
+
+### ============================================
+### 17. CREAR PARTIDO
+### ============================================
+POST {{baseUrl}}/partidos
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "fecha": "2026-03-20",
+  "hora": "18:00",
+  "lugar": "Estadio Municipal",
+  "estado": "Pendiente",
+  "idTorneo": 1,
+  "idEquipoLocal": 1,
+  "idEquipoVisitante": 2
+}
+
+### ============================================
+### 18. ACTUALIZAR RESULTADO DE PARTIDO
+### ============================================
+PUT {{baseUrl}}/partidos/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "resultadoLocal": 3,
+  "resultadoVisitante": 1,
+  "estado": "Finalizado"
+}
+
+### ============================================
+### 19. LISTAR CLASIFICACIONES
+### ============================================
+GET {{baseUrl}}/clasificaciones
+Authorization: Bearer {{token}}
+
+### ============================================
+### 20. VER CLASIFICACIÓN ESPECÍFICA (ID: 1)
+### ============================================
+GET {{baseUrl}}/clasificaciones/1
+Authorization: Bearer {{token}}
+
+### ============================================
+### 21. LISTAR NOTIFICACIONES
+### ============================================
+GET {{baseUrl}}/notificaciones
+Authorization: Bearer {{token}}
+
+### ============================================
+### 22. LOGOUT
+### ============================================
+POST {{baseUrl}}/logout
+Authorization: Bearer {{token}}
+
+### ============================================
+### FIN DE TESTS
+### ============================================

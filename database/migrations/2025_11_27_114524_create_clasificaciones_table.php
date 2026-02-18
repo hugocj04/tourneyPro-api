@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('derrotas')->default(0);
             $table->integer('golesFavor')->default(0);
             $table->integer('golesContra')->default(0);
-            $table->foreignId('idEquipo')->constrained('equipos', 'IdEquipo');
+            $table->foreignId('idEquipo')->constrained('equipos', 'idEquipo');
             $table->foreignId('idTorneo')->constrained('torneos', 'idTorneo');
             $table->timestamps();
         });

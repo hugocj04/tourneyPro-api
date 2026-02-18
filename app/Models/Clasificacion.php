@@ -25,13 +25,33 @@ class Clasificacion extends Model
         'idTorneo',
     ];
 
+    protected $appends = ['diferencia_goles'];
+
     public function equipo(): BelongsTo
     {
-        return $this->belongsTo(Equipo::class, 'idEquipo', 'IdEquipo');
+        return $this->belongsTo(Equipo::class, 'idEquipo', 'idEquipo');
     }
 
     public function torneo(): BelongsTo
     {
         return $this->belongsTo(Torneo::class, 'idTorneo', 'idTorneo');
+    }
+
+    /**
+     * Accessor para diferencia de goles
+     */
+    public function getDiferenciaGolesAttribute(): int
+    {
+        return $this->golesFavor - $this->golesContra;
+    }
+
+    /**
+     * Scope para ordenar por clasificación
+     */
+    public function scopeOrdenadaPorPosicion($query)
+    {
+        return $query->orderBy('puntos', 'desc')
+                     ->orderBy('golesFavor', 'desc')
+                     ->orderBy('golesContra', 'asc');
     }
 }

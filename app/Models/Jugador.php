@@ -10,12 +10,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Jugador extends Model
 {
     protected $table = 'jugadores';
+    
+    protected $primaryKey = 'idJugador';
 
     protected $fillable = [
         'dorsal',
         'posicion',
         'idUsuario',
-        'IdEquipo',
+        'idEquipo',
     ];
 
     public function usuario(): BelongsTo
@@ -25,6 +27,6 @@ class Jugador extends Model
 
     public function equipo(): BelongsTo
     {
-        return $this->belongsTo(Equipo::class, 'IdEquipo', 'IdEquipo');
+        return $this->belongsTo(Equipo::class, 'idEquipo', 'idEquipo');
     }
 }

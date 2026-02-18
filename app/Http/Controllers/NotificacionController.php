@@ -9,7 +9,7 @@ class NotificacionController extends Controller
 {
     public function index()
     {
-        return response()->json(Notificacion::with(['usuario', 'administrador'])->paginate(15));
+        return response()->json(Notificacion::with(['usuario'])->paginate(15));
     }
 
     public function store(Request $request)
@@ -20,17 +20,16 @@ class NotificacionController extends Controller
             'fechaEnvio' => ['required', 'date'],
             'leida' => ['sometimes', 'boolean'],
             'idUsuario' => ['required', 'exists:usuarios,idUsuario'],
-            'idAdmin' => ['required', 'exists:administradores,idAdmin'],
         ]);
 
         $notificacion = Notificacion::create($validated);
 
-        return response()->json($notificacion->load(['usuario', 'administrador']), 201);
+        return response()->json($notificacion->load(['usuario']), 201);
     }
 
     public function show(Notificacion $notificacion)
     {
-        return response()->json($notificacion->load(['usuario', 'administrador']));
+        return response()->json($notificacion->load(['usuario']));
     }
 
     public function update(Request $request, Notificacion $notificacion)
@@ -41,12 +40,11 @@ class NotificacionController extends Controller
             'fechaEnvio' => ['sometimes', 'required', 'date'],
             'leida' => ['sometimes', 'boolean'],
             'idUsuario' => ['sometimes', 'required', 'exists:usuarios,idUsuario'],
-            'idAdmin' => ['sometimes', 'required', 'exists:administradores,idAdmin'],
         ]);
 
         $notificacion->update($validated);
 
-        return response()->json($notificacion->load(['usuario', 'administrador']));
+        return response()->json($notificacion->load(['usuario']));
     }
 
     public function destroy(Notificacion $notificacion)

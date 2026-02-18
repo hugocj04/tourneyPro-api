@@ -7,7 +7,6 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -24,12 +23,9 @@ class AuthenticatedSessionController extends Controller
 
         $token = $request->user()->createToken('api')->plainTextToken;
 
-        $isAdmin = DB::table('administradores')->where('idUsuario', $request->user()->idUsuario)->exists();
-
         return response([
             'token' => $token,
             'user'  => $request->user(),
-            'isAdmin' => $isAdmin,
         ], 200);
     }
 

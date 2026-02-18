@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^php test-sprint3\\.php$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

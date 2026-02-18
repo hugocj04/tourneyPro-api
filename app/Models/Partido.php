@@ -6,6 +6,7 @@ use App\Models\Equipo;
 use App\Models\Torneo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Partido extends Model
 {
@@ -14,8 +15,7 @@ class Partido extends Model
     protected $primaryKey = 'idPartido';
 
     protected $fillable = [
-        'fecha',
-        'hora',
+        'fechaHora',
         'lugar',
         'resultadoLocal',
         'resultadoVisitante',
@@ -26,7 +26,7 @@ class Partido extends Model
     ];
 
     protected $casts = [
-        'fecha' => 'date',
+        'fechaHora' => 'datetime',
     ];
 
     public function torneo(): BelongsTo
@@ -36,11 +36,16 @@ class Partido extends Model
 
     public function equipoLocal(): BelongsTo
     {
-        return $this->belongsTo(Equipo::class, 'idEquipoLocal', 'IdEquipo');
+        return $this->belongsTo(Equipo::class, 'idEquipoLocal', 'idEquipo');
     }
 
     public function equipoVisitante(): BelongsTo
     {
-        return $this->belongsTo(Equipo::class, 'idEquipoVisitante', 'IdEquipo');
+        return $this->belongsTo(Equipo::class, 'idEquipoVisitante', 'idEquipo');
+    }
+    
+    public function eventos(): HasMany
+    {
+        return $this->hasMany(EventoPartido::class, 'idPartido', 'idPartido');
     }
 }

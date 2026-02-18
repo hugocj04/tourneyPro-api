@@ -7,9 +7,16 @@ use Illuminate\Http\Request;
 
 class ClasificacionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Clasificacion::with(['equipo', 'torneo'])->paginate(15));
+        $query = Clasificacion::with(['equipo', 'torneo'])->ordenadaPorPosicion();
+        
+        // Permitir filtrar por torneo
+        if ($request->has('idTorneo')) {
+            $query->where('idTorneo', $request->idTorneo);
+        }
+        
+        return response()->json($query->paginate(15));
     }
 
     public function store(Request $request)
@@ -22,7 +29,7 @@ class ClasificacionController extends Controller
             'derrotas' => ['sometimes', 'integer', 'min:0'],
             'golesFavor' => ['sometimes', 'integer', 'min:0'],
             'golesContra' => ['sometimes', 'integer', 'min:0'],
-            'idEquipo' => ['required', 'exists:equipos,IdEquipo'],
+            'idEquipo' => ['required', 'exists:equipos,idEquipo'],
             'idTorneo' => ['required', 'exists:torneos,idTorneo'],
         ]);
 
@@ -46,7 +53,7 @@ class ClasificacionController extends Controller
             'derrotas' => ['sometimes', 'integer', 'min:0'],
             'golesFavor' => ['sometimes', 'integer', 'min:0'],
             'golesContra' => ['sometimes', 'integer', 'min:0'],
-            'idEquipo' => ['sometimes', 'required', 'exists:equipos,IdEquipo'],
+            'idEquipo' => ['sometimes', 'required', 'exists:equipos,idEquipo'],
             'idTorneo' => ['sometimes', 'required', 'exists:torneos,idTorneo'],
         ]);
 

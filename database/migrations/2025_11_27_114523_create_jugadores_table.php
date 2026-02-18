@@ -10,11 +10,11 @@ return new class extends Migration
     {
         if (!Schema::hasTable('jugadores')) {
             Schema::create('jugadores', function (Blueprint $table) {
-                $table->id();
+                $table->id('idJugador');
                 $table->integer('dorsal');
                 $table->string('posicion');
                 $table->foreignId('idUsuario')->constrained('usuarios', 'idUsuario');
-                $table->foreignId('IdEquipo')->constrained('equipos', 'IdEquipo');
+                $table->foreignId('idEquipo')->constrained('equipos', 'idEquipo');
                 $table->timestamps();
             });
         }

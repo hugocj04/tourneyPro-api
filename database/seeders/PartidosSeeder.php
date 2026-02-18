@@ -17,27 +17,25 @@ class PartidosSeeder extends Seeder
 
         if ($equipos->count() >= 2 && $torneo) {
             Partido::create([
-                'fecha' => '2026-03-15',
-                'hora' => '18:00:00',
-                'lugar' => 'Estadio Santiago Bernabéu',
+                'fechaHora' => '2026-03-15 18:00:00',
+                'lugar' => 'Estadio Santiago Bernabeu',
                 'resultadoLocal' => 3,
                 'resultadoVisitante' => 1,
                 'estado' => 'Finalizado',
                 'idTorneo' => $torneo->idTorneo,
-                'idEquipoLocal' => $equipos[0]->IdEquipo,
-                'idEquipoVisitante' => $equipos[1]->IdEquipo,
+                'idEquipoLocal' => $equipos[0]->idEquipo,
+                'idEquipoVisitante' => $equipos[1]->idEquipo,
             ]);
 
             Partido::create([
-                'fecha' => '2026-03-22',
-                'hora' => '20:00:00',
+                'fechaHora' => '2026-03-22 20:00:00',
                 'lugar' => 'Camp Nou',
                 'resultadoLocal' => null,
                 'resultadoVisitante' => null,
-                'estado' => 'Próximo',
+                'estado' => 'Proximo',
                 'idTorneo' => $torneo->idTorneo,
-                'idEquipoLocal' => $equipos[1]->IdEquipo,
-                'idEquipoVisitante' => $equipos[0]->IdEquipo,
+                'idEquipoLocal' => $equipos[1]->idEquipo,
+                'idEquipoVisitante' => $equipos[0]->idEquipo,
             ]);
         }
     }

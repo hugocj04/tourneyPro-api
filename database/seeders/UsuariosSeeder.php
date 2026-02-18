@@ -15,7 +15,8 @@ class UsuariosSeeder extends Seeder
             'nombre' => 'Admin',
             'apellidos' => 'Principal',
             'email' => 'admin@tourneypro.com',
-            'contraseña' => '1234',
+            'contraseña' => Hash::make('1234'),
+            'rol' => 'admin',
             'fechaRegistro' => now(),
         ]);
     }

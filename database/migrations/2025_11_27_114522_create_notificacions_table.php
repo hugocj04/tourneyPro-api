@@ -15,7 +15,6 @@ return new class extends Migration
             $table->dateTime('fechaEnvio');
             $table->boolean('leida')->default(false);
             $table->foreignId('idUsuario')->constrained('usuarios', 'idUsuario');
-            $table->foreignId('idAdmin')->constrained('administradores', 'idAdmin');
             $table->timestamps();
         });
     }

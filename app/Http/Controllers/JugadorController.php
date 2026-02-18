@@ -19,7 +19,7 @@ class JugadorController extends Controller
             'dorsal' => ['required', 'integer', 'min:0'],
             'posicion' => ['required', 'string', 'max:255'],
             'idUsuario' => ['required', 'exists:usuarios,idUsuario', 'unique:jugadores,idUsuario'],
-            'IdEquipo' => ['required', 'exists:equipos,IdEquipo'],
+            'idEquipo' => ['required', 'exists:equipos,idEquipo'],
         ]);
 
         $jugador = Jugador::create($validated);
@@ -43,7 +43,7 @@ class JugadorController extends Controller
                 'exists:usuarios,idUsuario',
                 Rule::unique('jugadores', 'idUsuario')->ignore($jugador->id, 'id'),
             ],
-            'IdEquipo' => ['sometimes', 'required', 'exists:equipos,IdEquipo'],
+            'idEquipo' => ['sometimes', 'required', 'exists:equipos,idEquipo'],
         ]);
 
         $jugador->update($validated);

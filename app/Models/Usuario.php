@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\Administrador;
-use App\Models\Cliente;
 use App\Models\Jugador;
 use App\Models\Notificacion;
+use App\Models\Torneo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -24,8 +23,11 @@ class Usuario extends Authenticatable
     protected $fillable = [
         'nombre',
         'apellidos',
+        'telefono',
+        'foto_perfil',
         'email',
         'contraseña',
+        'rol',
         'fechaRegistro',
     ];
 
@@ -47,14 +49,9 @@ class Usuario extends Authenticatable
         return $this->contraseña;
     }
 
-    public function administrador(): HasOne
+    public function torneos(): HasMany
     {
-        return $this->hasOne(Administrador::class, 'idUsuario', 'idUsuario');
-    }
-
-    public function cliente(): HasOne
-    {
-        return $this->hasOne(Cliente::class, 'idUsuario', 'idUsuario');
+        return $this->hasMany(Torneo::class, 'idUsuarioCreador', 'idUsuario');
     }
 
     public function notificaciones(): HasMany

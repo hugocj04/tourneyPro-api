@@ -23,6 +23,7 @@ class RegisteredUserController extends Controller
         $request->validate([
             'nombre' => ['required', 'string', 'max:255'],
             'apellidos' => ['required', 'string', 'max:255'],
+            'telefono' => ['nullable', 'string', 'max:20'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:usuarios'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
@@ -30,8 +31,10 @@ class RegisteredUserController extends Controller
         $user = Usuario::create([
             'nombre' => $request->nombre,
             'apellidos' => $request->apellidos,
+            'telefono' => $request->telefono,
             'email' => $request->email,
             'contraseña' => $request->password,
+            'rol' => 'usuario', // Por defecto usuarios de la app móvil
             'fechaRegistro' => now(),
         ]);
 

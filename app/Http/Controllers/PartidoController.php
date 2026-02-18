@@ -7,23 +7,61 @@ use Illuminate\Http\Request;
 
 class PartidoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Partido::with(['torneo', 'equipoLocal', 'equipoVisitante'])->paginate(15));
+        $query = Partido::with(['torneo', 'equipoLocal', 'equipoVisitante']);
+        
+        // Filtrar por torneo
+        if ($request->has('idTorneo')) {
+            $query->where('idTorneo', $request->idTorneo);
+        }
+        
+        // Filtrar por equipo (local o visitante)
+        if ($request->has('idEquipo')) {
+            $query->where(function($q) use ($request) {
+                $q->where('idEquipoLocal', $request->idEquipo)
+                  ->orWhere('idEquipoVisitante', $request->idEquipo);
+            });
+        }
+        
+        // Filtrar por estado
+        if ($request->has('estado')) {
+            $query->where('estado', $request->estado);
+        }
+        
+        // Filtrar por fecha
+        if ($request->has('fecha')) {
+            $query->whereDate('fechaHora', $request->fecha);
+        }
+        
+        // Filtrar partidos jugados o pendientes
+        if ($request->has('jugado')) {
+            if ($request->jugado === 'true' || $request->jugado === '1') {
+                $query->whereNotNull('resultadoLocal');
+            } else {
+                $query->whereNull('resultadoLocal');
+            }
+        }
+        
+        // Ordenamiento
+        $sortBy = $request->get('sortBy', 'fechaHora');
+        $sortOrder = $request->get('sortOrder', 'asc');
+        $query->orderBy($sortBy, $sortOrder);
+        
+        return response()->json($query->paginate(15));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'fecha' => ['required', 'date'],
-            'hora' => ['required', 'date_format:H:i'],
+            'fechaHora' => ['required', 'date'],
             'lugar' => ['required', 'string', 'max:255'],
             'resultadoLocal' => ['nullable', 'integer'],
             'resultadoVisitante' => ['nullable', 'integer'],
             'estado' => ['required', 'string', 'max:100'],
             'idTorneo' => ['required', 'exists:torneos,idTorneo'],
-            'idEquipoLocal' => ['required', 'exists:equipos,IdEquipo'],
-            'idEquipoVisitante' => ['required', 'different:idEquipoLocal', 'exists:equipos,IdEquipo'],
+            'idEquipoLocal' => ['required', 'exists:equipos,idEquipo'],
+            'idEquipoVisitante' => ['required', 'different:idEquipoLocal', 'exists:equipos,idEquipo'],
         ]);
 
         $partido = Partido::create($validated);
@@ -39,15 +77,14 @@ class PartidoController extends Controller
     public function update(Request $request, Partido $partido)
     {
         $validated = $request->validate([
-            'fecha' => ['sometimes', 'required', 'date'],
-            'hora' => ['sometimes', 'required', 'date_format:H:i'],
+            'fechaHora' => ['sometimes', 'required', 'date'],
             'lugar' => ['sometimes', 'required', 'string', 'max:255'],
             'resultadoLocal' => ['sometimes', 'nullable', 'integer'],
             'resultadoVisitante' => ['sometimes', 'nullable', 'integer'],
             'estado' => ['sometimes', 'required', 'string', 'max:100'],
             'idTorneo' => ['sometimes', 'required', 'exists:torneos,idTorneo'],
-            'idEquipoLocal' => ['sometimes', 'required', 'exists:equipos,IdEquipo'],
-            'idEquipoVisitante' => ['sometimes', 'required', 'exists:equipos,IdEquipo'],
+            'idEquipoLocal' => ['sometimes', 'required', 'exists:equipos,idEquipo'],
+            'idEquipoVisitante' => ['sometimes', 'required', 'exists:equipos,idEquipo'],
         ]);
 
         if (($validated['idEquipoLocal'] ?? $partido->idEquipoLocal) === ($validated['idEquipoVisitante'] ?? $partido->idEquipoVisitante)) {

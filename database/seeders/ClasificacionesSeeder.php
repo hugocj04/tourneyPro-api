@@ -24,7 +24,7 @@ class ClasificacionesSeeder extends Seeder
                 'derrotas' => 0,
                 'golesFavor' => 8,
                 'golesContra' => 2,
-                'idEquipo' => $equipos[0]->IdEquipo,
+                'idEquipo' => $equipos[0]->idEquipo,
                 'idTorneo' => $torneo->idTorneo,
             ]);
 
@@ -36,7 +36,7 @@ class ClasificacionesSeeder extends Seeder
                 'derrotas' => 1,
                 'golesFavor' => 5,
                 'golesContra' => 3,
-                'idEquipo' => $equipos[1]->IdEquipo,
+                'idEquipo' => $equipos[1]->idEquipo,
                 'idTorneo' => $torneo->idTorneo,
             ]);
         }

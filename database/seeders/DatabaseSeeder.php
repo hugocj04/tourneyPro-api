@@ -14,14 +14,14 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UsuariosSeeder::class,
-            ClientesSeeder::class,
             EquiposSeeder::class,
-            AdministradoresSeeder::class,
             TorneosSeeder::class,
             NotificacionesSeeder::class,
             JugadoresSeeder::class,
             ClasificacionesSeeder::class,
             PartidosSeeder::class,
+            InscripcionEquiposSeeder::class,
+            EventoPartidosSeeder::class,
         ]);
     }
 }

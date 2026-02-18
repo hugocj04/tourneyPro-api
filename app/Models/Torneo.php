@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Administrador;
+use App\Models\Usuario;
 use App\Models\Clasificacion;
 use App\Models\Partido;
 use Illuminate\Database\Eloquent\Model;
@@ -17,23 +17,30 @@ class Torneo extends Model
 
     protected $fillable = [
         'nombre',
+        'descripcion',
+        'ubicacion',
+        'imagenPortada',
         'deporte',
         'categoria',
         'formato',
+        'tipoFutbol',
+        'maxEquipos',
+        'precioInscripcion',
         'fechaInicio',
         'fechaFin',
         'estado',
-        'idAdmin',
+        'idUsuarioCreador',
     ];
 
     protected $casts = [
         'fechaInicio' => 'date',
         'fechaFin' => 'date',
+        'precioInscripcion' => 'decimal:2',
     ];
 
-    public function administrador(): BelongsTo
+    public function usuarioCreador(): BelongsTo
     {
-        return $this->belongsTo(Administrador::class, 'idAdmin', 'idAdmin');
+        return $this->belongsTo(Usuario::class, 'idUsuarioCreador', 'idUsuario');
     }
 
     public function partidos(): HasMany
@@ -44,5 +51,10 @@ class Torneo extends Model
     public function clasificaciones(): HasMany
     {
         return $this->hasMany(Clasificacion::class, 'idTorneo', 'idTorneo');
+    }
+    
+    public function inscripciones(): HasMany
+    {
+        return $this->hasMany(InscripcionEquipo::class, 'idTorneo', 'idTorneo');
     }
 }

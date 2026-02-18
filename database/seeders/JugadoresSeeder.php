@@ -19,23 +19,18 @@ class JugadoresSeeder extends Seeder
             Jugador::create([
                 'dorsal' => 10,
                 'posicion' => 'Delantero',
-                'idUsuario' => $usuarios[2]->idUsuario,
-                'IdEquipo' => $equipos[0]->IdEquipo,
+                'idUsuario' => $usuarios[0]->idUsuario,
+                'idEquipo' => $equipos[0]->idEquipo,
             ]);
 
-            Jugador::create([
-                'dorsal' => 7,
-                'posicion' => 'Mediocampista',
-                'idUsuario' => $usuarios[3]->idUsuario,
-                'IdEquipo' => $equipos[0]->IdEquipo,
-            ]);
-
-            Jugador::create([
-                'dorsal' => 9,
-                'posicion' => 'Delantero',
-                'idUsuario' => $usuarios[4]->idUsuario,
-                'IdEquipo' => $equipos[1]->IdEquipo,
-            ]);
+            if ($usuarios->count() > 1) {
+                Jugador::create([
+                    'dorsal' => 7,
+                    'posicion' => 'Mediocampista',
+                    'idUsuario' => $usuarios[0]->idUsuario,
+                    'idEquipo' => $equipos[1]->idEquipo,
+                ]);
+            }
         }
     }
 }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('fechaInicio');
             $table->date('fechaFin');
             $table->string('estado');
-            $table->foreignId('idAdmin')->constrained('administradores', 'idAdmin');
+            $table->foreignId('idUsuarioCreador')->constrained('usuarios', 'idUsuario');
             $table->timestamps();
         });
     }

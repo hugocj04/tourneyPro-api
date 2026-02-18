@@ -17,8 +17,8 @@ return new class extends Migration
             $table->integer('resultadoVisitante')->nullable();
             $table->string('estado');
             $table->foreignId('idTorneo')->constrained('torneos', 'idTorneo');
-            $table->foreignId('idEquipoLocal')->constrained('equipos', 'IdEquipo');
-            $table->foreignId('idEquipoVisitante')->constrained('equipos', 'IdEquipo');
+            $table->foreignId('idEquipoLocal')->constrained('equipos', 'idEquipo');
+            $table->foreignId('idEquipoVisitante')->constrained('equipos', 'idEquipo');
             $table->timestamps();
         });
     }

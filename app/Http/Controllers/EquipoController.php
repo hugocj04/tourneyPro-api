@@ -7,9 +7,26 @@ use Illuminate\Http\Request;
 
 class EquipoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Equipo::all());
+        $query = Equipo::query();
+        
+        // Filtrar por categoría
+        if ($request->has('categoria')) {
+            $query->where('categoria', $request->categoria);
+        }
+        
+        // Búsqueda por nombre
+        if ($request->has('search')) {
+            $query->where('nombre', 'like', '%' . $request->search . '%');
+        }
+        
+        // Ordenamiento
+        $sortBy = $request->get('sortBy', 'nombre');
+        $sortOrder = $request->get('sortOrder', 'asc');
+        $query->orderBy($sortBy, $sortOrder);
+        
+        return response()->json($query->get());
     }
 
     public function store(Request $request)
