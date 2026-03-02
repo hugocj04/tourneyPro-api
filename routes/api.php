@@ -9,7 +9,6 @@ use App\Http\Controllers\EventoPartidoController;
 use App\Http\Controllers\FixtureController;
 use App\Http\Controllers\InscripcionEquipoController;
 use App\Http\Controllers\JugadorController;
-use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\PartidoController;
 use App\Http\Controllers\TorneoController;
 use App\Http\Controllers\UsuarioController;
@@ -25,18 +24,22 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('usuarios', UsuarioController::class);
     Route::apiResource('equipos', EquipoController::class);
     Route::apiResource('torneos', TorneoController::class);
-    Route::apiResource('jugadores', JugadorController::class);
-    Route::apiResource('clasificaciones', ClasificacionController::class);
+    Route::apiResource('jugadores', JugadorController::class)
+        ->parameters(['jugadores' => 'jugador']);
+    Route::apiResource('clasificaciones', ClasificacionController::class)
+        ->parameters(['clasificaciones' => 'clasificacion']);
     Route::apiResource('partidos', PartidoController::class);
-    Route::apiResource('notificaciones', NotificacionController::class);
-    Route::apiResource('inscripciones', InscripcionEquipoController::class);
-    Route::apiResource('eventos', EventoPartidoController::class);
+    Route::get('partidos/{partido}/eventos',  [EventoPartidoController::class, 'indexByPartido']);
+    Route::post('partidos/{partido}/eventos', [EventoPartidoController::class, 'storeByPartido']);
+    Route::apiResource('inscripciones', InscripcionEquipoController::class)
+        ->parameters(['inscripciones' => 'inscripcionEquipo']);
+    Route::apiResource('eventos', EventoPartidoController::class)
+        ->parameters(['eventos' => 'eventoPartido']);
     
     // Rutas de estadísticas
     Route::get('estadisticas', [EstadisticaJugadorController::class, 'index']);
     Route::get('estadisticas/{estadisticaJugador}', [EstadisticaJugadorController::class, 'show']);
     Route::get('estadisticas/goleadores/ranking', [EstadisticaJugadorController::class, 'goleadores']);
-    Route::get('estadisticas/tarjetas/ranking', [EstadisticaJugadorController::class, 'tarjetas']);
     
     // Rutas de fixture
     Route::post('fixture/generar', [FixtureController::class, 'generar']);

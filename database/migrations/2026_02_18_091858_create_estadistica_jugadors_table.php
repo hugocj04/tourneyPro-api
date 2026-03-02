@@ -16,10 +16,6 @@ return new class extends Migration
             $table->unsignedBigInteger('idJugador');
             $table->unsignedBigInteger('idTorneo');
             $table->integer('goles')->default(0);
-            $table->integer('asistencias')->default(0);
-            $table->integer('tarjetasAmarillas')->default(0);
-            $table->integer('tarjetasRojas')->default(0);
-            $table->integer('minutosJugados')->default(0);
             $table->integer('partidosJugados')->default(0);
             $table->timestamps();
 

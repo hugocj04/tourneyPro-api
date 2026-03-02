@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('idPartido')->constrained('partidos', 'idPartido')->onDelete('cascade');
             $table->unsignedBigInteger('idJugador')->nullable();
             $table->foreignId('idEquipo')->constrained('equipos', 'idEquipo')->onDelete('cascade');
-            $table->enum('tipoEvento', ['gol', 'tarjeta_amarilla', 'tarjeta_roja', 'cambio', 'autogol', 'penal_fallado', 'lesion']);
-            $table->integer('minuto');
+            $table->enum('tipoEvento', ['gol']);
+            $table->integer('minuto')->nullable();
             $table->string('descripcion')->nullable();
             $table->timestamps();
             

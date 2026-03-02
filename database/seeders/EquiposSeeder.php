@@ -10,28 +10,25 @@ class EquiposSeeder extends Seeder
 {
     public function run(): void
     {
-        Equipo::create([
-            'nombre' => 'Real Madrid',
-            'logo' => 'https://logodownload.org/wp-content/uploads/2016/03/real-madrid-logo-0.png',
-            'categoria' => 'Senior',
-        ]);
+        $equipos = [
+            // Senior
+            ['nombre' => 'Real Madrid',       'logo' => 'https://logodownload.org/wp-content/uploads/2016/03/real-madrid-logo-0.png',                                                                                        'categoria' => 'Senior'],
+            ['nombre' => 'FC Barcelona',      'logo' => 'https://upload.wikimedia.org/wikipedia/sco/thumb/4/47/FC_Barcelona_%28crest%29.svg/1010px-FC_Barcelona_%28crest%29.svg.png',    'categoria' => 'Senior'],
+            ['nombre' => 'Atlético Madrid',   'logo' => 'https://logodownload.org/wp-content/uploads/2017/02/atletico-madrid-logo-0.png',                                                                                    'categoria' => 'Senior'],
+            ['nombre' => 'Valencia CF',       'logo' => 'https://assets.football-logos.cc/logos/spain/700x700/valencia.b55bb96d.png',                                                                                        'categoria' => 'Senior'],
+            ['nombre' => 'Sevilla FC',        'logo' => 'https://logodownload.org/wp-content/uploads/2017/05/sevilla-fc-logo.png',                                                                                           'categoria' => 'Senior'],
+            ['nombre' => 'Real Sociedad',     'logo' => 'https://logodownload.org/wp-content/uploads/2018/12/real-sociedad-logo.png',                                                                                        'categoria' => 'Senior'],
+            ['nombre' => 'Athletic Bilbao',   'logo' => 'https://logodownload.org/wp-content/uploads/2019/06/athletic-bilbao-logo.png',                                                                                      'categoria' => 'Senior'],
+            ['nombre' => 'Villarreal CF',     'logo' => 'https://logodownload.org/wp-content/uploads/2018/06/villarreal-logo.png',                                                                                           'categoria' => 'Senior'],
+            // Juvenil
+            ['nombre' => 'Juvenil Alcobendas', 'logo' => null, 'categoria' => 'Juvenil'],
+            ['nombre' => 'Juvenil Leganés',    'logo' => null, 'categoria' => 'Juvenil'],
+            ['nombre' => 'Juvenil Getafe',     'logo' => null, 'categoria' => 'Juvenil'],
+            ['nombre' => 'Juvenil Fuenlabrada','logo' => null, 'categoria' => 'Juvenil'],
+        ];
 
-        Equipo::create([
-            'nombre' => 'FC Barcelona',
-            'logo' => 'https://upload.wikimedia.org/wikipedia/sco/thumb/4/47/FC_Barcelona_%28crest%29.svg/1010px-FC_Barcelona_%28crest%29.svg.png',
-            'categoria' => 'Senior',
-        ]);
-
-        Equipo::create([
-            'nombre' => 'Atlético Madrid',
-            'logo' => 'https://logodownload.org/wp-content/uploads/2017/02/atletico-madrid-logo-0.png',
-            'categoria' => 'Senior',
-        ]);
-
-        Equipo::create([
-            'nombre' => 'Valencia CF',
-            'logo' => 'https://assets.football-logos.cc/logos/spain/700x700/valencia.b55bb96d.png',
-            'categoria' => 'Senior',
-        ]);
+        foreach ($equipos as $equipo) {
+            Equipo::create($equipo);
+        }
     }
 }

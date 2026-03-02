@@ -13,6 +13,8 @@ class Jugador extends Model
     
     protected $primaryKey = 'idJugador';
 
+    public static $snakeAttributes = false;
+
     protected $fillable = [
         'dorsal',
         'posicion',

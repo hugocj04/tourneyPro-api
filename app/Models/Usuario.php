@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\Jugador;
-use App\Models\Notificacion;
 use App\Models\Torneo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -52,11 +51,6 @@ class Usuario extends Authenticatable
     public function torneos(): HasMany
     {
         return $this->hasMany(Torneo::class, 'idUsuarioCreador', 'idUsuario');
-    }
-
-    public function notificaciones(): HasMany
-    {
-        return $this->hasMany(Notificacion::class, 'idUsuario', 'idUsuario');
     }
 
     public function jugador(): HasOne

@@ -15,19 +15,11 @@ class EstadisticaJugador extends Model
         'idJugador',
         'idTorneo',
         'goles',
-        'asistencias',
-        'tarjetasAmarillas',
-        'tarjetasRojas',
-        'minutosJugados',
         'partidosJugados',
     ];
 
     protected $casts = [
         'goles' => 'integer',
-        'asistencias' => 'integer',
-        'tarjetasAmarillas' => 'integer',
-        'tarjetasRojas' => 'integer',
-        'minutosJugados' => 'integer',
         'partidosJugados' => 'integer',
     ];
 

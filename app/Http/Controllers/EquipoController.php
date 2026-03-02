@@ -44,7 +44,10 @@ class EquipoController extends Controller
 
     public function show(Equipo $equipo)
     {
-        return response()->json($equipo->load(['jugadores', 'clasificaciones', 'partidosLocales', 'partidosVisitantes']));
+        return response()->json([
+            'success' => true,
+            'data' => $equipo->load(['jugadores', 'clasificaciones', 'partidosLocales', 'partidosVisitantes']),
+        ]);
     }
 
     public function update(Request $request, Equipo $equipo)

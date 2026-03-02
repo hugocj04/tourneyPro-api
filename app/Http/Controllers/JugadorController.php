@@ -8,9 +8,15 @@ use Illuminate\Validation\Rule;
 
 class JugadorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Jugador::with(['usuario', 'equipo'])->paginate(15));
+        $query = Jugador::with(['usuario', 'equipo']);
+
+        if ($request->has('idEquipo')) {
+            $query->where('idEquipo', $request->idEquipo);
+        }
+
+        return response()->json($query->paginate(100));
     }
 
     public function store(Request $request)
@@ -29,7 +35,10 @@ class JugadorController extends Controller
 
     public function show(Jugador $jugador)
     {
-        return response()->json($jugador->load(['usuario', 'equipo']));
+        return response()->json([
+            'success' => true,
+            'data' => $jugador->load(['usuario', 'equipo']),
+        ]);
     }
 
     public function update(Request $request, Jugador $jugador)

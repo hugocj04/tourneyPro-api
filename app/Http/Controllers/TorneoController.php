@@ -83,7 +83,10 @@ class TorneoController extends Controller
     {
         $this->authorize('view', $torneo);
         
-        return response()->json($torneo->load(['usuarioCreador', 'partidos', 'clasificaciones']));
+        return response()->json([
+            'success' => true,
+            'data' => $torneo->load(['usuarioCreador', 'partidos', 'clasificaciones']),
+        ]);
     }
 
     public function update(Request $request, Torneo $torneo)

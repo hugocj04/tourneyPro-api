@@ -42,7 +42,7 @@ class UsuarioController extends Controller
     {
         $this->authorize('view', $usuario);
         
-        return response()->json($usuario->load(['torneos', 'notificaciones', 'jugador']));
+        return response()->json($usuario->load(['torneos', 'jugador']));
     }
 
     public function update(Request $request, Usuario $usuario)

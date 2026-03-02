@@ -10,7 +10,32 @@ use Illuminate\Http\Request;
 class EventoPartidoController extends Controller
 {
     use AuthorizesRequests;
-    
+
+    public function indexByPartido(\App\Models\Partido $partido)
+    {
+        $eventos = $partido->eventos()->with(['equipo', 'jugador.usuario'])->orderBy('minuto')->get();
+        return response()->json(['success' => true, 'data' => $eventos]);
+    }
+
+    public function storeByPartido(Request $request, \App\Models\Partido $partido)
+    {
+        $validated = $request->validate([
+            'idJugador'   => ['nullable', 'exists:jugadores,idJugador'],
+            'idEquipo'    => ['required', 'exists:equipos,idEquipo'],
+            'tipoEvento'  => ['required', 'in:gol'],
+            'minuto'      => ['nullable', 'integer', 'min:0', 'max:120'],
+            'descripcion' => ['nullable', 'string', 'max:500'],
+        ]);
+        $validated['idPartido'] = $partido->idPartido;
+
+        $evento = EventoPartido::create($validated);
+        if ($evento->idJugador) {
+            $this->actualizarEstadisticas($evento);
+        }
+
+        return response()->json(['success' => true, 'data' => $evento->load(['jugador.usuario', 'equipo'])], 201);
+    }
+
     public function index()
     {
         $eventos = EventoPartido::with(['partido', 'jugador', 'equipo'])->paginate(15);
@@ -24,14 +49,13 @@ class EventoPartidoController extends Controller
             'idPartido' => ['required', 'exists:partidos,idPartido'],
             'idJugador' => ['nullable', 'exists:jugadores,idJugador'],
             'idEquipo' => ['required', 'exists:equipos,idEquipo'],
-            'tipoEvento' => ['required', 'in:gol,tarjeta_amarilla,tarjeta_roja,cambio,autogol,penal_fallado,lesion'],
-            'minuto' => ['required', 'integer', 'min:0', 'max:120'],
+            'tipoEvento' => ['required', 'in:gol'],
+            'minuto' => ['nullable', 'integer', 'min:0', 'max:120'],
             'descripcion' => ['nullable', 'string', 'max:500'],
         ]);
         
         $evento = EventoPartido::create($validated);
         
-        // Actualizar estadísticas automáticamente
         if ($evento->idJugador) {
             $this->actualizarEstadisticas($evento);
         }
@@ -46,21 +70,19 @@ class EventoPartidoController extends Controller
     
     public function update(Request $request, EventoPartido $eventoPartido)
     {
-        // Revertir estadísticas anteriores si hay jugador
         if ($eventoPartido->idJugador) {
             $this->revertirEstadisticas($eventoPartido);
         }
         
         $validated = $request->validate([
             'idJugador' => ['sometimes', 'nullable', 'exists:jugadores,idJugador'],
-            'tipoEvento' => ['sometimes', 'in:gol,tarjeta_amarilla,tarjeta_roja,cambio,autogol,penal_fallado,lesion'],
-            'minuto' => ['sometimes', 'integer', 'min:0', 'max:120'],
+            'tipoEvento' => ['sometimes', 'in:gol'],
+            'minuto' => ['sometimes', 'nullable', 'integer', 'min:0', 'max:120'],
             'descripcion' => ['sometimes', 'nullable', 'string', 'max:500'],
         ]);
         
         $eventoPartido->update($validated);
         
-        // Aplicar nuevas estadísticas
         if ($eventoPartido->idJugador) {
             $this->actualizarEstadisticas($eventoPartido);
         }
@@ -70,7 +92,6 @@ class EventoPartidoController extends Controller
     
     public function destroy(EventoPartido $eventoPartido)
     {
-        // Revertir estadísticas antes de eliminar
         if ($eventoPartido->idJugador) {
             $this->revertirEstadisticas($eventoPartido);
         }
@@ -82,9 +103,6 @@ class EventoPartidoController extends Controller
         ]);
     }
     
-    /**
-     * Actualizar estadísticas del jugador según el tipo de evento
-     */
     private function actualizarEstadisticas(EventoPartido $evento)
     {
         $evento->load('partido');
@@ -97,33 +115,17 @@ class EventoPartidoController extends Controller
             ],
             [
                 'goles' => 0,
-                'asistencias' => 0,
-                'tarjetasAmarillas' => 0,
-                'tarjetasRojas' => 0,
-                'minutosJugados' => 0,
                 'partidosJugados' => 0,
             ]
         );
         
-        switch ($evento->tipoEvento) {
-            case 'gol':
-            case 'autogol':
-                $estadistica->goles++;
-                break;
-            case 'tarjeta_amarilla':
-                $estadistica->tarjetasAmarillas++;
-                break;
-            case 'tarjeta_roja':
-                $estadistica->tarjetasRojas++;
-                break;
+        if ($evento->tipoEvento === 'gol') {
+            $estadistica->goles++;
         }
         
         $estadistica->save();
     }
     
-    /**
-     * Revertir estadísticas del jugador según el tipo de evento
-     */
     private function revertirEstadisticas(EventoPartido $evento)
     {
         $evento->load('partido');
@@ -137,19 +139,10 @@ class EventoPartidoController extends Controller
             return;
         }
         
-        switch ($evento->tipoEvento) {
-            case 'gol':
-            case 'autogol':
-                $estadistica->goles = max(0, $estadistica->goles - 1);
-                break;
-            case 'tarjeta_amarilla':
-                $estadistica->tarjetasAmarillas = max(0, $estadistica->tarjetasAmarillas - 1);
-                break;
-            case 'tarjeta_roja':
-                $estadistica->tarjetasRojas = max(0, $estadistica->tarjetasRojas - 1);
-                break;
+        if ($evento->tipoEvento === 'gol') {
+            $estadistica->goles = max(0, $estadistica->goles - 1);
         }
-        
+
         $estadistica->save();
     }
 }

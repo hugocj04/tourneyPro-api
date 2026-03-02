@@ -12,25 +12,22 @@ class JugadoresSeeder extends Seeder
 {
     public function run(): void
     {
-        $usuarios = Usuario::all();
-        $equipos = Equipo::all();
+        $jugadorUsers = Usuario::where('rol', 'jugador')->orderBy('idUsuario')->get();
+        $equipos      = Equipo::orderBy('idEquipo')->get();
 
-        if ($usuarios->count() >= 3 && $equipos->count() >= 2) {
+        if ($jugadorUsers->isEmpty() || $equipos->isEmpty()) return;
+
+        $posiciones = ['Portero', 'Defensa', 'Defensa', 'Mediocampista', 'Mediocampista', 'Delantero'];
+
+        // Un jugador por equipo, cubriendo todos los equipos (hasta agotar usuarios)
+        foreach ($equipos as $idx => $equipo) {
+            if (!isset($jugadorUsers[$idx])) break;
             Jugador::create([
-                'dorsal' => 10,
-                'posicion' => 'Delantero',
-                'idUsuario' => $usuarios[0]->idUsuario,
-                'idEquipo' => $equipos[0]->idEquipo,
+                'dorsal'    => ($idx % 11) + 1,
+                'posicion'  => $posiciones[$idx % count($posiciones)],
+                'idUsuario' => $jugadorUsers[$idx]->idUsuario,
+                'idEquipo'  => $equipo->idEquipo,
             ]);
-
-            if ($usuarios->count() > 1) {
-                Jugador::create([
-                    'dorsal' => 7,
-                    'posicion' => 'Mediocampista',
-                    'idUsuario' => $usuarios[0]->idUsuario,
-                    'idEquipo' => $equipos[1]->idEquipo,
-                ]);
-            }
         }
     }
 }

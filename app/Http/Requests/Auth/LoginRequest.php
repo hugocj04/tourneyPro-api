@@ -38,7 +38,9 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        $user = \App\Models\Usuario::where('email', $this->email)->first();
+
+        if (!$user || !\Illuminate\Support\Facades\Hash::check($this->password, $user->contraseña)) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
@@ -46,6 +48,8 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        Auth::login($user, $this->boolean('remember'));
+        
         RateLimiter::clear($this->throttleKey());
     }
 

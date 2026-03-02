@@ -90,26 +90,12 @@ class EventoPartidoObserver
             ],
             [
                 'goles' => 0,
-                'asistencias' => 0,
-                'tarjetasAmarillas' => 0,
-                'tarjetasRojas' => 0,
-                'minutosJugados' => 0,
                 'partidosJugados' => 0,
             ]
         );
 
-        // Actualizar según el tipo de evento
-        switch ($eventoPartido->tipoEvento) {
-            case 'gol':
-            case 'autogol':
-                $estadistica->goles++;
-                break;
-            case 'tarjeta_amarilla':
-                $estadistica->tarjetasAmarillas++;
-                break;
-            case 'tarjeta_roja':
-                $estadistica->tarjetasRojas++;
-                break;
+        if ($eventoPartido->tipoEvento === 'gol') {
+            $estadistica->goles++;
         }
 
         $estadistica->save();
@@ -136,17 +122,8 @@ class EventoPartidoObserver
         }
 
         // Revertir según el tipo de evento
-        switch ($tipoEvento) {
-            case 'gol':
-            case 'autogol':
-                $estadistica->goles = max(0, $estadistica->goles - 1);
-                break;
-            case 'tarjeta_amarilla':
-                $estadistica->tarjetasAmarillas = max(0, $estadistica->tarjetasAmarillas - 1);
-                break;
-            case 'tarjeta_roja':
-                $estadistica->tarjetasRojas = max(0, $estadistica->tarjetasRojas - 1);
-                break;
+        if ($tipoEvento === 'gol') {
+            $estadistica->goles = max(0, $estadistica->goles - 1);
         }
 
         $estadistica->save();

@@ -16,7 +16,6 @@ class DatabaseSeeder extends Seeder
             UsuariosSeeder::class,
             EquiposSeeder::class,
             TorneosSeeder::class,
-            NotificacionesSeeder::class,
             JugadoresSeeder::class,
             ClasificacionesSeeder::class,
             PartidosSeeder::class,

@@ -71,7 +71,10 @@ class PartidoController extends Controller
 
     public function show(Partido $partido)
     {
-        return response()->json($partido->load(['torneo', 'equipoLocal', 'equipoVisitante']));
+        return response()->json([
+            'success' => true,
+            'data' => $partido->load(['torneo', 'equipoLocal', 'equipoVisitante']),
+        ]);
     }
 
     public function update(Request $request, Partido $partido)
@@ -93,7 +96,10 @@ class PartidoController extends Controller
 
         $partido->update($validated);
 
-        return response()->json($partido->load(['torneo', 'equipoLocal', 'equipoVisitante']));
+        return response()->json([
+            'success' => true,
+            'data' => $partido->load(['torneo', 'equipoLocal', 'equipoVisitante']),
+        ]);
     }
 
     public function destroy(Partido $partido)

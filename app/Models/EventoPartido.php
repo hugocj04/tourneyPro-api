@@ -10,6 +10,8 @@ class EventoPartido extends Model
     protected $table = 'evento_partidos';
     
     protected $primaryKey = 'idEvento';
+
+    public static $snakeAttributes = false;
     
     protected $fillable = [
         'idPartido',

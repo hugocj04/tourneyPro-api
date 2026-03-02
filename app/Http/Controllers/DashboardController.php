@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Clasificacion;
 use App\Models\EstadisticaJugador;
+use App\Models\EventoPartido;
 use App\Models\Partido;
 use App\Models\Torneo;
 use Illuminate\Http\Request;
@@ -58,12 +59,20 @@ class DashboardController extends Controller
      */
     public function goleadores(Request $request, $idTorneo)
     {
-        $goleadores = EstadisticaJugador::with(['jugador.equipo'])
-            ->where('idTorneo', $idTorneo)
-            ->where('goles', '>', 0)
+        $goleadores = EventoPartido::with(['jugador.usuario', 'jugador.equipo'])
+            ->whereHas('partido', fn($q) => $q->where('idTorneo', $idTorneo))
+            ->where('tipoEvento', 'gol')
+            ->whereNotNull('idJugador')
+            ->select('idJugador', DB::raw('COUNT(*) as goles'))
+            ->groupBy('idJugador')
             ->orderBy('goles', 'desc')
             ->limit(20)
-            ->get();
+            ->get()
+            ->map(fn($e) => [
+                'idJugador' => $e->idJugador,
+                'goles'     => $e->goles,
+                'jugador'   => $e->jugador,
+            ]);
 
         return response()->json([
             'success' => true,

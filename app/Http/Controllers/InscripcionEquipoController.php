@@ -10,16 +10,20 @@ class InscripcionEquipoController extends Controller
 {
     use AuthorizesRequests;
     
-    public function index()
+    public function index(Request $request)
     {
-        // Admin ve todas, usuarios solo sus inscripciones (equipos propios)
         $query = InscripcionEquipo::with(['torneo', 'equipo']);
-        
-        if (auth()->user()->rol !== 'admin') {
-            // Filtrar por equipos del usuario (si implementas esa relación)
-            // Por ahora mostramos todas
+
+        if ($request->has('idTorneo')) {
+            $query->where('idTorneo', $request->idTorneo);
         }
-        
+        if ($request->has('idEquipo')) {
+            $query->where('idEquipo', $request->idEquipo);
+        }
+        if ($request->has('estado')) {
+            $query->where('estado', $request->estado);
+        }
+
         return response()->json($query->paginate(15));
     }
     
@@ -49,7 +53,10 @@ class InscripcionEquipoController extends Controller
     
     public function show(InscripcionEquipo $inscripcionEquipo)
     {
-        return response()->json($inscripcionEquipo->load(['torneo', 'equipo']));
+        return response()->json([
+            'success' => true,
+            'data' => $inscripcionEquipo->load(['torneo', 'equipo']),
+        ]);
     }
     
     public function update(Request $request, InscripcionEquipo $inscripcionEquipo)

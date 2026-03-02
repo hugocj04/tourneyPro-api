@@ -70,29 +70,5 @@ class EstadisticaJugadorController extends Controller
         ]);
     }
 
-    /**
-     * Obtener jugadores con más tarjetas
-     */
-    public function tarjetas(Request $request)
-    {
-        $idTorneo = $request->query('idTorneo');
 
-        if (!$idTorneo) {
-            return response()->json([
-                'success' => false,
-                'message' => 'El parámetro idTorneo es requerido',
-            ], 400);
-        }
-
-        $jugadores = EstadisticaJugador::with(['jugador', 'torneo'])
-            ->where('idTorneo', $idTorneo)
-            ->orderByRaw('(tarjetasAmarillas + tarjetasRojas * 2) DESC')
-            ->limit(10)
-            ->get();
-
-        return response()->json([
-            'success' => true,
-            'data' => $jugadores,
-        ]);
-    }
 }
