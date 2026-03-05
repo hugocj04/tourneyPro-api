@@ -47,6 +47,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
     // Rutas de dashboard
     Route::get('dashboard/resumen', [DashboardController::class, 'resumenGeneral']);
+    Route::get('dashboard/resumen-movil', [DashboardController::class, 'resumenMovil']);
     Route::get('dashboard/torneo/{idTorneo}', [DashboardController::class, 'torneo']);
     Route::get('dashboard/torneo/{idTorneo}/tabla', [DashboardController::class, 'tablaPosiciones']);
     Route::get('dashboard/torneo/{idTorneo}/goleadores', [DashboardController::class, 'goleadores']);

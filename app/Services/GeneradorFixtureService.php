@@ -27,7 +27,7 @@ class GeneradorFixtureService
         string $lugar = 'Por definir'
     ): array {
         $torneo = Torneo::findOrFail($idTorneo);
-        
+
         // Obtener equipos del torneo (a través de inscripciones aceptadas)
         $equipos = $torneo->inscripciones()
             ->where('estado', 'aceptada')
@@ -40,42 +40,62 @@ class GeneradorFixtureService
             throw new \Exception('Se necesitan al menos 2 equipos inscritos y aceptados para generar fixture');
         }
 
-        // Generar partidos usando Round-Robin
-        $partidos = $this->algoritmRoundRobin($equipos);
-        
-        // Crear los partidos en la base de datos
+        // Calcular el fixture completo según Round-Robin
+        $fechasCompletas = $this->algoritmRoundRobin($equipos);
+
+        // Construir conjunto de partidos ya existentes (independiente de local/visitante)
+        $existentesSet = Partido::where('idTorneo', $idTorneo)
+            ->get(['idEquipoLocal', 'idEquipoVisitante'])
+            ->mapWithKeys(function ($p) {
+                $key = min($p->idEquipoLocal, $p->idEquipoVisitante)
+                     . '-'
+                     . max($p->idEquipoLocal, $p->idEquipoVisitante);
+                return [$key => true];
+            })
+            ->toArray();
+
+        // Crear solo los partidos que faltan, respetando la fecha de cada jornada
         $partidosCreados = [];
         $fechaActual = Carbon::parse($fechaInicio);
-        $fechaNumero = 1;
-        
-        foreach ($partidos as $fecha) {
+
+        foreach ($fechasCompletas as $fecha) {
             foreach ($fecha as $partido) {
-                $fechaHora = $fechaActual->copy()->setTimeFromTimeString($horaInicio);
-                
-                $partidoCreado = Partido::create([
-                    'fechaHora' => $fechaHora,
-                    'lugar' => $lugar,
-                    'resultadoLocal' => null,
-                    'resultadoVisitante' => null,
-                    'estado' => 'programado',
-                    'idTorneo' => $idTorneo,
-                    'idEquipoLocal' => $partido['local'],
-                    'idEquipoVisitante' => $partido['visitante'],
-                ]);
-                
-                $partidosCreados[] = $partidoCreado;
+                $key = min($partido['local'], $partido['visitante'])
+                     . '-'
+                     . max($partido['local'], $partido['visitante']);
+
+                if (!isset($existentesSet[$key])) {
+                    $fechaHora = $fechaActual->copy()->setTimeFromTimeString($horaInicio);
+
+                    $partidoCreado = Partido::create([
+                        'fechaHora'          => $fechaHora,
+                        'lugar'              => $lugar,
+                        'resultadoLocal'     => null,
+                        'resultadoVisitante' => null,
+                        'estado'             => 'programado',
+                        'idTorneo'           => $idTorneo,
+                        'idEquipoLocal'      => $partido['local'],
+                        'idEquipoVisitante'  => $partido['visitante'],
+                    ]);
+
+                    $partidosCreados[] = $partidoCreado;
+                }
             }
-            
+
             $fechaActual->addDays($diasEntreFechas);
-            $fechaNumero++;
         }
-        
+
+        $totalFaltaban = count($partidosCreados);
+        $mensaje = $totalFaltaban > 0
+            ? "Se han creado {$totalFaltaban} partido(s) que faltaban en el fixture"
+            : 'El fixture ya estaba completo, no faltaba ningún partido';
+
         return [
-            'success' => true,
-            'message' => 'Fixture generado exitosamente',
-            'partidos_creados' => count($partidosCreados),
-            'fechas' => count($partidos),
-            'partidos' => $partidosCreados,
+            'success'          => true,
+            'message'          => $mensaje,
+            'partidos_creados' => $totalFaltaban,
+            'fechas'           => count($fechasCompletas),
+            'partidos'         => $partidosCreados,
         ];
     }
 

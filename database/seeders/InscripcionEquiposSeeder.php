@@ -25,7 +25,6 @@ class InscripcionEquiposSeeder extends Seeder
         $t1 = $torneos[0]; $t2 = $torneos[1];
         $t3 = $torneos[2]; $t4 = $torneos[3];
 
-        // ── Torneo 1: Liga Regional Senior ──────────────────────
         $t1insc = [
             [$rm,  'aceptada',  100.00, -30],
             [$bar, 'aceptada',  100.00, -28],
@@ -41,7 +40,6 @@ class InscripcionEquiposSeeder extends Seeder
                 'fechaInscripcion'=>now()->addDays($r[3]),'estado'=>$r[1],'montoAbonado'=>$r[2]]);
         }
 
-        // ── Torneo 2: Copa de España ──────────────────────────────
         $t2insc = [
             [$rm,  'aceptada',  200.00, -45],
             [$atm, 'aceptada',  200.00, -43],
@@ -56,13 +54,11 @@ class InscripcionEquiposSeeder extends Seeder
                 'fechaInscripcion'=>now()->addDays($r[3]),'estado'=>$r[1],'montoAbonado'=>$r[2]]);
         }
 
-        // ── Torneo 3: Navidad 2025 (juveniles) ───────────────────
         foreach ([$jAlc,$jLeg,$jGet,$jFue] as $i => $eq) {
             InscripcionEquipo::create(['idTorneo'=>$t3->idTorneo,'idEquipo'=>$eq->idEquipo,
                 'fechaInscripcion'=>now()->subDays(60 + $i),'estado'=>'aceptada','montoAbonado'=>50.00]);
         }
 
-        // ── Torneo 4: Verano 2026 (pendiente) ────────────────────
         $t4insc = [
             [$rm,  'pendiente', null, -2],
             [$bar, 'pendiente', null, -1],

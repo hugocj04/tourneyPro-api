@@ -11,11 +11,24 @@ class UsuarioController extends Controller
 {
     use AuthorizesRequests;
     
-    public function index()
+    public function index(Request $request)
     {
         $this->authorize('viewAny', Usuario::class);
-        
-        return response()->json(Usuario::paginate(15));
+        $perPage = (int) $request->input('per_page', 15);
+
+        if ($perPage <= 0) {
+            $all = Usuario::orderBy('fechaRegistro', 'desc')->get();
+            return response()->json([
+                'data'         => $all,
+                'total'        => $all->count(),
+                'per_page'     => $all->count(),
+                'current_page' => 1,
+                'last_page'    => 1,
+            ]);
+        }
+
+        $perPage = min($perPage, 500);
+        return response()->json(Usuario::orderBy('fechaRegistro', 'desc')->paginate($perPage));
     }
 
     public function store(Request $request)

@@ -10,7 +10,6 @@ use App\Models\Jugador;
 
 class EventoPartidosSeeder extends Seeder
 {
-    // Helper: create N goals for $equipo in $partido, cycling through $jugadores
     private function crearGoles(Partido $partido, Equipo $equipo, int $cantidad, array $minutos, array $jugadores): void
     {
         for ($i = 0; $i < $cantidad; $i++) {
@@ -42,53 +41,41 @@ class EventoPartidosSeeder extends Seeder
         $jugSev = Jugador::where('idEquipo', $sev->idEquipo)->get()->all();
         $jugRso = Jugador::where('idEquipo', $rso->idEquipo)->get()->all();
 
-        // Mapa de partidos finalizados por sus equipos
         $findPartido = fn($local, $vis) => Partido::where('idEquipoLocal', $local->idEquipo)
             ->where('idEquipoVisitante', $vis->idEquipo)
             ->where('estado', 'finalizado')
             ->first();
 
-        // ── T1 Liga Senior ───────────────────────────────────────
-        // RM 2-1 Bar
         if ($p = $findPartido($rm, $bar)) {
             $this->crearGoles($p, $rm,  2, [14, 67], $jugRM);
             $this->crearGoles($p, $bar, 1, [38],     $jugBar);
         }
-        // Atm 1-1 Val
         if ($p = $findPartido($atm, $val)) {
             $this->crearGoles($p, $atm, 1, [55], $jugAtm);
             $this->crearGoles($p, $val, 1, [82], $jugVal);
         }
-        // Sev 3-0 Rso
         if ($p = $findPartido($sev, $rso)) {
             $this->crearGoles($p, $sev, 3, [10, 44, 78], $jugSev);
         }
-        // Bar 0-2 Atm
         if ($p = $findPartido($bar, $atm)) {
             $this->crearGoles($p, $atm, 2, [27, 61], $jugAtm);
         }
-        // Val 1-2 RM
         if ($p = $findPartido($val, $rm)) {
             $this->crearGoles($p, $val, 1, [33], $jugVal);
             $this->crearGoles($p, $rm,  2, [48, 85], $jugRM);
         }
-        // Rso 1-1 Sev
         if ($p = $findPartido($rso, $sev)) {
             $this->crearGoles($p, $rso, 1, [22], $jugRso);
             $this->crearGoles($p, $sev, 1, [70], $jugSev);
         }
 
-        // ── T2 Copa España ───────────────────────────────────────
-        // RM 3-0 Ath
         if ($p = $findPartido($rm, $ath)) {
             $this->crearGoles($p, $rm, 3, [5, 30, 88], $jugRM);
         }
-        // Atm 1-0 Vil
         if ($p = $findPartido($atm, $vil)) {
             $this->crearGoles($p, $atm, 1, [53], $jugAtm);
         }
 
-        // ── T3 Navidad (juveniles, sin jugadores seed) ───────────
         $partidosJuveniles = Partido::where('estado', 'finalizado')
             ->whereIn('idEquipoLocal', [$jAlc->idEquipo, $jLeg->idEquipo, $jGet->idEquipo, $jFue->idEquipo])
             ->get();

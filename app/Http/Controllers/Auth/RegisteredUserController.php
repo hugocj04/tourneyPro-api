@@ -26,6 +26,7 @@ class RegisteredUserController extends Controller
             'telefono' => ['nullable', 'string', 'max:20'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:usuarios'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'rol' => ['nullable', 'string', 'in:organizador,jugador'],
         ]);
 
         $user = Usuario::create([
@@ -34,7 +35,7 @@ class RegisteredUserController extends Controller
             'telefono' => $request->telefono,
             'email' => $request->email,
             'contraseña' => $request->password,
-            'rol' => 'usuario', // Por defecto usuarios de la app móvil
+            'rol' => $request->input('rol', 'jugador'),
             'fechaRegistro' => now(),
         ]);
 

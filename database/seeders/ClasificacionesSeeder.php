@@ -24,10 +24,7 @@ class ClasificacionesSeeder extends Seeder
 
         $t1 = $torneos[0]; $t2 = $torneos[1]; $t3 = $torneos[2];
 
-        // ── Torneo 1: Liga Regional Senior ──────────────────────
-        // Resultados calculados de las 6 jornadas finalizadas
         $t1rows = [
-            // [equipo, pts, pj, V, E, D, GF, GC]
             [$rm,  6, 2, 2, 0, 0, 4, 2],
             [$atm, 4, 2, 1, 1, 0, 3, 1],
             [$sev, 4, 2, 1, 1, 0, 4, 1],
@@ -41,7 +38,6 @@ class ClasificacionesSeeder extends Seeder
                 'empates'=>$r[4],'derrotas'=>$r[5],'golesFavor'=>$r[6],'golesContra'=>$r[7]]);
         }
 
-        // ── Torneo 2: Copa de España ──────────────────────────────
         $t2rows = [
             [$rm,  3, 1, 1, 0, 0, 3, 0],
             [$atm, 3, 1, 1, 0, 0, 1, 0],
@@ -54,7 +50,6 @@ class ClasificacionesSeeder extends Seeder
                 'empates'=>$r[4],'derrotas'=>$r[5],'golesFavor'=>$r[6],'golesContra'=>$r[7]]);
         }
 
-        // ── Torneo 3: Navidad 2025 (finalizado) ──────────────────
         $t3rows = [
             [$jAlc, 7, 3, 2, 1, 0, 6, 3],
             [$jGet, 4, 3, 1, 1, 1, 3, 4],

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Clasificacion;
 use App\Models\EstadisticaJugador;
 use App\Models\EventoPartido;
+use App\Models\Jugador;
 use App\Models\Partido;
 use App\Models\Torneo;
 use Illuminate\Http\Request;
@@ -202,9 +203,9 @@ class DashboardController extends Controller
     public function resumenGeneral()
     {
         $estadisticas = [
-            'torneos_activos' => Torneo::where('estado', 'activo')->count(),
-            'torneos_finalizados' => Torneo::where('estado', 'finalizado')->count(),
-            'partidos_hoy' => Partido::whereDate('fechaHora', today())->count(),
+            'torneos_activos'      => Torneo::where('estado', 'activo')->count(),
+            'torneos_finalizados'  => Torneo::where('estado', 'finalizado')->count(),
+            'partidos_hoy'         => Partido::whereDate('fechaHora', today())->count(),
             'partidos_esta_semana' => Partido::whereBetween('fechaHora', [
                 now()->startOfWeek(),
                 now()->endOfWeek(),
@@ -213,7 +214,23 @@ class DashboardController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $estadisticas,
+            'data'    => $estadisticas,
+        ]);
+    }
+
+    /**
+     * Resumen para la app móvil
+     */
+    public function resumenMovil()
+    {
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'torneos_activos'     => Torneo::where('estado', 'activo')->count(),
+                'total_jugadores'     => Jugador::count(),
+                'total_partidos'      => Partido::count(),
+                'partidos_pendientes' => Partido::where('estado', 'programado')->count(),
+            ],
         ]);
     }
 }

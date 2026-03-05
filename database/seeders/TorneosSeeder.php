@@ -17,13 +17,11 @@ class TorneosSeeder extends Seeder
         if (!$admin) return;
 
         $torneos = [
-            // Activo (Liga en curso)
             [
                 'nombre'           => 'Liga Regional Senior 2026',
                 'descripcion'      => 'Liga regional con formato todos contra todos. 8 equipos Senior.',
                 'ubicacion'        => 'Barcelona, España',
-                'imagenPortada'    => 'https://example.com/liga-regional.jpg',
-                'deporte'          => 'Fútbol',
+                'imagenPortada'    => 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=80',
                 'categoria'        => 'Senior',
                 'formato'          => 'Liga',
                 'tipoFutbol'       => 'futbol_11',
@@ -34,13 +32,11 @@ class TorneosSeeder extends Seeder
                 'estado'           => 'activo',
                 'idUsuarioCreador' => $admin->idUsuario,
             ],
-            // Activo (Cup en curso)
             [
                 'nombre'           => 'Copa de España 2026',
                 'descripcion'      => 'Torneo nacional de eliminación directa. Equipos Senior de toda España.',
                 'ubicacion'        => 'Madrid, España',
-                'imagenPortada'    => 'https://example.com/copa-espana.jpg',
-                'deporte'          => 'Fútbol',
+                'imagenPortada'    => 'https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=800&q=80',
                 'categoria'        => 'Senior',
                 'formato'          => 'Eliminación Directa',
                 'tipoFutbol'       => 'futbol_11',
@@ -51,13 +47,11 @@ class TorneosSeeder extends Seeder
                 'estado'           => 'activo',
                 'idUsuarioCreador' => $org ? $org->idUsuario : $admin->idUsuario,
             ],
-            // Finalizado
             [
                 'nombre'           => 'Torneo de Navidad 2025',
                 'descripcion'      => 'Torneo amistoso de fútbol 7 en categoría Juvenil.',
                 'ubicacion'        => 'Valencia, España',
-                'imagenPortada'    => 'https://example.com/navidad-2025.jpg',
-                'deporte'          => 'Fútbol',
+                'imagenPortada'    => 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=800&q=80',
                 'categoria'        => 'Juvenil',
                 'formato'          => 'Liga',
                 'tipoFutbol'       => 'futbol_7',
@@ -68,13 +62,11 @@ class TorneosSeeder extends Seeder
                 'estado'           => 'finalizado',
                 'idUsuarioCreador' => $admin->idUsuario,
             ],
-            // Pendiente (próximo)
             [
                 'nombre'           => 'Torneo Verano Senior 2026',
                 'descripcion'      => 'Torneo de verano en modalidad fútbol 5. Categoría Senior.',
                 'ubicacion'        => 'Sevilla, España',
-                'imagenPortada'    => null,
-                'deporte'          => 'Fútbol',
+                'imagenPortada'    => 'https://images.unsplash.com/photo-1551280857-2b9bbe52acf4?w=800&q=80',
                 'categoria'        => 'Senior',
                 'formato'          => 'Grupos + Eliminatoria',
                 'tipoFutbol'       => 'futbol_5',
@@ -85,13 +77,11 @@ class TorneosSeeder extends Seeder
                 'estado'           => 'pendiente',
                 'idUsuarioCreador' => $org ? $org->idUsuario : $admin->idUsuario,
             ],
-            // Cancelado
             [
                 'nombre'           => 'Copa Primavera 2026',
                 'descripcion'      => 'Cancelado por falta de equipos inscritos.',
                 'ubicacion'        => 'Bilbao, España',
-                'imagenPortada'    => null,
-                'deporte'          => 'Fútbol',
+                'imagenPortada'    => 'https://images.unsplash.com/photo-1560272564-c83b66b1ad12?w=800&q=80',
                 'categoria'        => 'Juvenil',
                 'formato'          => 'Eliminación Directa',
                 'tipoFutbol'       => 'futbol_7',

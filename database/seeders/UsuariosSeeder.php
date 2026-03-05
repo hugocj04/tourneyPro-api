@@ -11,7 +11,6 @@ class UsuariosSeeder extends Seeder
 {
     public function run(): void
     {
-        // Admin
         Usuario::create([
             'nombre' => 'Admin',
             'apellidos' => 'Principal',
@@ -21,7 +20,6 @@ class UsuariosSeeder extends Seeder
             'fechaRegistro' => now()->subDays(120),
         ]);
 
-        // Organizadores
         $organizadores = [
             ['nombre' => 'Carlos', 'apellidos' => 'Ramírez Vega',    'email' => 'carlos@example.com'],
             ['nombre' => 'Ana',    'apellidos' => 'Gómez Torres',    'email' => 'ana@example.com'],
@@ -38,7 +36,6 @@ class UsuariosSeeder extends Seeder
             ]);
         }
 
-        // Jugadores
         $jugadores = [
             ['nombre' => 'Juan',      'apellidos' => 'Pérez García',     'email' => 'juan@example.com'],
             ['nombre' => 'María',     'apellidos' => 'López Martínez',   'email' => 'maria@example.com'],

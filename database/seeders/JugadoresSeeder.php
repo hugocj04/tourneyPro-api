@@ -19,7 +19,6 @@ class JugadoresSeeder extends Seeder
 
         $posiciones = ['Portero', 'Defensa', 'Defensa', 'Mediocampista', 'Mediocampista', 'Delantero'];
 
-        // Un jugador por equipo, cubriendo todos los equipos (hasta agotar usuarios)
         foreach ($equipos as $idx => $equipo) {
             if (!isset($jugadorUsers[$idx])) break;
             Jugador::create([

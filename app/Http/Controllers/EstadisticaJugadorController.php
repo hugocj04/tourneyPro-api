@@ -58,7 +58,7 @@ class EstadisticaJugadorController extends Controller
             ], 400);
         }
 
-        $goleadores = EstadisticaJugador::with(['jugador', 'torneo'])
+        $goleadores = EstadisticaJugador::with(['jugador.usuario', 'jugador.equipo', 'torneo'])
             ->where('idTorneo', $idTorneo)
             ->orderBy('goles', 'desc')
             ->limit(10)

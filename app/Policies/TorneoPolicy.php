@@ -22,8 +22,8 @@ class TorneoPolicy
      */
     public function view(Usuario $usuario, Torneo $torneo): bool
     {
-        // Admin puede ver todos, usuario solo los suyos
-        return $usuario->rol === 'admin' || $torneo->idUsuarioCreador === $usuario->idUsuario;
+        // Todos los usuarios autenticados pueden ver cualquier torneo
+        return true;
     }
 
     /**

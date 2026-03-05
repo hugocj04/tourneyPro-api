@@ -20,7 +20,6 @@ class Torneo extends Model
         'descripcion',
         'ubicacion',
         'imagenPortada',
-        'deporte',
         'categoria',
         'formato',
         'tipoFutbol',

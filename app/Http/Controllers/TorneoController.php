@@ -14,20 +14,17 @@ class TorneoController extends Controller
     {
         $this->authorize('viewAny', Torneo::class);
         
-        // Admin ve todos, usuario solo los suyos
+        // Todos los usuarios ven todos los torneos
+        // El filtro por creador es opcional (para "Mis Torneos")
         $query = Torneo::query();
-        
-        if (auth()->user()->rol !== 'admin') {
-            $query->where('idUsuarioCreador', auth()->id());
+
+        if ($request->has('idUsuarioCreador')) {
+            $query->where('idUsuarioCreador', $request->idUsuarioCreador);
         }
-        
+
         // Filtros adicionales
         if ($request->has('estado')) {
             $query->where('estado', $request->estado);
-        }
-        
-        if ($request->has('deporte')) {
-            $query->where('deporte', $request->deporte);
         }
         
         if ($request->has('tipoFutbol')) {
@@ -47,8 +44,9 @@ class TorneoController extends Controller
         $sortBy = $request->get('sortBy', 'fechaInicio');
         $sortOrder = $request->get('sortOrder', 'desc');
         $query->orderBy($sortBy, $sortOrder);
-        
-        return response()->json($query->paginate(15));
+
+        $perPage = (int) $request->get('per_page', 15);
+        return response()->json($query->paginate($perPage));
     }
 
     public function store(Request $request)
@@ -60,7 +58,6 @@ class TorneoController extends Controller
             'descripcion' => ['nullable', 'string'],
             'ubicacion' => ['nullable', 'string', 'max:255'],
             'imagenPortada' => ['nullable', 'string', 'max:500'],
-            'deporte' => ['required', 'string', 'max:255'],
             'categoria' => ['required', 'string', 'max:255'],
             'formato' => ['required', 'string', 'max:255'],
             'tipoFutbol' => ['required', 'in:futbol_5,futbol_7,futbol_11'],
@@ -68,8 +65,11 @@ class TorneoController extends Controller
             'precioInscripcion' => ['nullable', 'numeric', 'min:0'],
             'fechaInicio' => ['required', 'date'],
             'fechaFin' => ['required', 'date', 'after_or_equal:fechaInicio'],
-            'estado' => ['required', 'string', 'max:100'],
+            'estado' => ['sometimes', 'string', 'max:100'],
         ]);
+        
+        // Asignar estado por defecto si no se envía
+        $validated['estado'] = $validated['estado'] ?? 'pendiente';
         
         // Asignar automáticamente el usuario creador
         $validated['idUsuarioCreador'] = auth()->id();
@@ -98,7 +98,6 @@ class TorneoController extends Controller
             'descripcion' => ['sometimes', 'nullable', 'string'],
             'ubicacion' => ['sometimes', 'nullable', 'string', 'max:255'],
             'imagenPortada' => ['sometimes', 'nullable', 'string', 'max:500'],
-            'deporte' => ['sometimes', 'required', 'string', 'max:255'],
             'categoria' => ['sometimes', 'required', 'string', 'max:255'],
             'formato' => ['sometimes', 'required', 'string', 'max:255'],
             'tipoFutbol' => ['sometimes', 'required', 'in:futbol_5,futbol_7,futbol_11'],
