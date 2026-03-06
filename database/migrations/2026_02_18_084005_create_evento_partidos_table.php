@@ -6,9 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+    
     public function up(): void
     {
         Schema::create('evento_partidos', function (Blueprint $table) {
@@ -21,14 +19,10 @@ return new class extends Migration
             $table->string('descripcion')->nullable();
             $table->timestamps();
             
-            // Foreign key para jugador (nullable)
             $table->foreign('idJugador')->references('idJugador')->on('jugadores')->onDelete('set null');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('evento_partidos');

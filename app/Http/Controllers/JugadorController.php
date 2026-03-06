@@ -16,6 +16,10 @@ class JugadorController extends Controller
             $query->where('idEquipo', $request->idEquipo);
         }
 
+        if ($request->has('idUsuario')) {
+            $query->where('idUsuario', $request->idUsuario);
+        }
+
         return response()->json($query->paginate(100));
     }
 

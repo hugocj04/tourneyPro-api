@@ -14,9 +14,6 @@ class FixtureController extends Controller
         $this->generadorFixture = $generadorFixture;
     }
 
-    /**
-     * Generar fixture automático para un torneo
-     */
     public function generar(Request $request)
     {
         $validated = $request->validate([
@@ -45,9 +42,6 @@ class FixtureController extends Controller
         }
     }
 
-    /**
-     * Limpiar fixture existente de un torneo
-     */
     public function limpiar(Request $request)
     {
         $validated = $request->validate([

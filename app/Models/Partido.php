@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Partido extends Model
 {
-    // Preserve camelCase relation names in JSON (equipoLocal, equipoVisitante)
+    
     public static $snakeAttributes = false;
 
     protected $table = 'partidos';

@@ -11,7 +11,6 @@ class ClasificacionController extends Controller
     {
         $query = Clasificacion::with(['equipo', 'torneo'])->ordenadaPorPosicion();
         
-        // Permitir filtrar por torneo
         if ($request->has('idTorneo')) {
             $query->where('idTorneo', $request->idTorneo);
         }

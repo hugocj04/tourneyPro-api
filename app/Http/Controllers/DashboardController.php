@@ -13,9 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-    /**
-     * Obtener estadísticas generales de un torneo
-     */
+    
     public function torneo(Request $request, $idTorneo)
     {
         $torneo = Torneo::with(['inscripciones', 'partidos', 'clasificaciones'])
@@ -39,9 +37,6 @@ class DashboardController extends Controller
         ]);
     }
 
-    /**
-     * Obtener tabla de posiciones de un torneo
-     */
     public function tablaPosiciones(Request $request, $idTorneo)
     {
         $clasificaciones = Clasificacion::with(['equipo'])
@@ -55,9 +50,6 @@ class DashboardController extends Controller
         ]);
     }
 
-    /**
-     * Obtener tabla de goleadores de un torneo
-     */
     public function goleadores(Request $request, $idTorneo)
     {
         $goleadores = EventoPartido::with(['jugador.usuario', 'jugador.equipo'])
@@ -81,9 +73,6 @@ class DashboardController extends Controller
         ]);
     }
 
-    /**
-     * Obtener equipos con mejor ataque
-     */
     public function mejorAtaque(Request $request, $idTorneo)
     {
         $equipos = Clasificacion::with(['equipo'])
@@ -98,9 +87,6 @@ class DashboardController extends Controller
         ]);
     }
 
-    /**
-     * Obtener equipos con mejor defensa
-     */
     public function mejorDefensa(Request $request, $idTorneo)
     {
         $equipos = Clasificacion::with(['equipo'])
@@ -115,9 +101,6 @@ class DashboardController extends Controller
         ]);
     }
 
-    /**
-     * Obtener próximos partidos de un torneo
-     */
     public function proximosPartidos(Request $request, $idTorneo)
     {
         $partidos = Partido::with(['equipoLocal', 'equipoVisitante'])
@@ -134,9 +117,6 @@ class DashboardController extends Controller
         ]);
     }
 
-    /**
-     * Obtener últimos resultados de un torneo
-     */
     public function ultimosResultados(Request $request, $idTorneo)
     {
         $partidos = Partido::with(['equipoLocal', 'equipoVisitante'])
@@ -152,9 +132,6 @@ class DashboardController extends Controller
         ]);
     }
 
-    /**
-     * Obtener estadísticas completas de un equipo en un torneo
-     */
     public function estadisticasEquipo(Request $request, $idTorneo, $idEquipo)
     {
         $clasificacion = Clasificacion::with(['equipo'])
@@ -197,9 +174,6 @@ class DashboardController extends Controller
         ]);
     }
 
-    /**
-     * Obtener resumen general del sistema
-     */
     public function resumenGeneral()
     {
         $estadisticas = [
@@ -218,9 +192,6 @@ class DashboardController extends Controller
         ]);
     }
 
-    /**
-     * Resumen para la app móvil
-     */
     public function resumenMovil()
     {
         return response()->json([

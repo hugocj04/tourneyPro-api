@@ -14,15 +14,12 @@ class TorneoController extends Controller
     {
         $this->authorize('viewAny', Torneo::class);
         
-        // Todos los usuarios ven todos los torneos
-        // El filtro por creador es opcional (para "Mis Torneos")
         $query = Torneo::query();
 
         if ($request->has('idUsuarioCreador')) {
             $query->where('idUsuarioCreador', $request->idUsuarioCreador);
         }
 
-        // Filtros adicionales
         if ($request->has('estado')) {
             $query->where('estado', $request->estado);
         }
@@ -35,12 +32,10 @@ class TorneoController extends Controller
             $query->where('categoria', $request->categoria);
         }
         
-        // Búsqueda por nombre
         if ($request->has('search')) {
             $query->where('nombre', 'like', '%' . $request->search . '%');
         }
         
-        // Ordenamiento
         $sortBy = $request->get('sortBy', 'fechaInicio');
         $sortOrder = $request->get('sortOrder', 'desc');
         $query->orderBy($sortBy, $sortOrder);
@@ -68,10 +63,8 @@ class TorneoController extends Controller
             'estado' => ['sometimes', 'string', 'max:100'],
         ]);
         
-        // Asignar estado por defecto si no se envía
         $validated['estado'] = $validated['estado'] ?? 'pendiente';
         
-        // Asignar automáticamente el usuario creador
         $validated['idUsuarioCreador'] = auth()->id();
 
         $torneo = Torneo::create($validated);

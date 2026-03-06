@@ -24,7 +24,6 @@ class InscripcionEquipo extends Model
         'montoAbonado' => 'decimal:2',
     ];
     
-    // Relaciones
     public function torneo(): BelongsTo
     {
         return $this->belongsTo(Torneo::class, 'idTorneo', 'idTorneo');

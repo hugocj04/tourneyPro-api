@@ -11,17 +11,14 @@ class EquipoController extends Controller
     {
         $query = Equipo::query();
         
-        // Filtrar por categoría
         if ($request->has('categoria')) {
             $query->where('categoria', $request->categoria);
         }
         
-        // Búsqueda por nombre
         if ($request->has('search')) {
             $query->where('nombre', 'like', '%' . $request->search . '%');
         }
         
-        // Ordenamiento
         $sortBy = $request->get('sortBy', 'nombre');
         $sortOrder = $request->get('sortOrder', 'asc');
         $query->orderBy($sortBy, $sortOrder);

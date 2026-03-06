@@ -7,20 +7,15 @@ use Illuminate\Http\Request;
 
 class EstadisticaJugadorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * Filtrable por idTorneo
-     */
+    
     public function index(Request $request)
     {
         $query = EstadisticaJugador::with(['jugador', 'torneo']);
 
-        // Filtrar por torneo si se proporciona
         if ($request->has('idTorneo')) {
             $query->where('idTorneo', $request->idTorneo);
         }
 
-        // Filtrar por jugador si se proporciona
         if ($request->has('idJugador')) {
             $query->where('idJugador', $request->idJugador);
         }
@@ -33,9 +28,6 @@ class EstadisticaJugadorController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(EstadisticaJugador $estadisticaJugador)
     {
         return response()->json([
@@ -44,9 +36,6 @@ class EstadisticaJugadorController extends Controller
         ]);
     }
 
-    /**
-     * Obtener tabla de goleadores de un torneo
-     */
     public function goleadores(Request $request)
     {
         $idTorneo = $request->query('idTorneo');
@@ -69,6 +58,5 @@ class EstadisticaJugadorController extends Controller
             'data' => $goleadores,
         ]);
     }
-
 
 }

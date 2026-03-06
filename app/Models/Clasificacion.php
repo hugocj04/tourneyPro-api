@@ -37,17 +37,11 @@ class Clasificacion extends Model
         return $this->belongsTo(Torneo::class, 'idTorneo', 'idTorneo');
     }
 
-    /**
-     * Accessor para diferencia de goles
-     */
     public function getDiferenciaGolesAttribute(): int
     {
         return $this->golesFavor - $this->golesContra;
     }
 
-    /**
-     * Scope para ordenar por clasificación
-     */
     public function scopeOrdenadaPorPosicion($query)
     {
         return $query->orderBy('puntos', 'desc')

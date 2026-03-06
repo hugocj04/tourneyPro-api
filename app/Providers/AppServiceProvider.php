@@ -21,10 +21,8 @@ class AppServiceProvider extends ServiceProvider
             return config('app.frontend_url')."/password-reset/$token?email={$notifiable->getEmailForPasswordReset()}";
         });
 
-        // Registrar Observer para actualizar clasificaciones automáticamente
         Partido::observe(PartidoObserver::class);
         
-        // Registrar Observer para actualizar estadísticas de jugadores
         EventoPartido::observe(EventoPartidoObserver::class);
     }
 }

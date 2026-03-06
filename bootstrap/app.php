@@ -24,14 +24,13 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        // Manejo de errores para rutas API
+        
         $exceptions->render(function (Throwable $e, Request $request) {
-            // Solo aplicar para rutas API
+            
             if (!$request->is('api/*')) {
                 return null;
             }
 
-            // ValidationException - Errores de validación
             if ($e instanceof ValidationException) {
                 return response()->json([
                     'success' => false,
@@ -40,7 +39,6 @@ return Application::configure(basePath: dirname(__DIR__))
                 ], 422);
             }
 
-            // AuthenticationException - No autenticado
             if ($e instanceof AuthenticationException) {
                 return response()->json([
                     'success' => false,
@@ -48,7 +46,6 @@ return Application::configure(basePath: dirname(__DIR__))
                 ], 401);
             }
 
-            // AuthorizationException - No autorizado
             if ($e instanceof AuthorizationException) {
                 return response()->json([
                     'success' => false,
@@ -56,7 +53,6 @@ return Application::configure(basePath: dirname(__DIR__))
                 ], 403);
             }
 
-            // ModelNotFoundException - Modelo no encontrado
             if ($e instanceof ModelNotFoundException) {
                 $model = strtolower(class_basename($e->getModel()));
                 return response()->json([
@@ -65,7 +61,6 @@ return Application::configure(basePath: dirname(__DIR__))
                 ], 404);
             }
 
-            // NotFoundHttpException - Ruta no encontrada
             if ($e instanceof NotFoundHttpException) {
                 return response()->json([
                     'success' => false,
@@ -73,7 +68,6 @@ return Application::configure(basePath: dirname(__DIR__))
                 ], 404);
             }
 
-            // MethodNotAllowedHttpException - Método HTTP no permitido
             if ($e instanceof MethodNotAllowedHttpException) {
                 return response()->json([
                     'success' => false,
@@ -81,7 +75,6 @@ return Application::configure(basePath: dirname(__DIR__))
                 ], 405);
             }
 
-            // Error genérico de servidor
             $statusCode = method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500;
             
             return response()->json([

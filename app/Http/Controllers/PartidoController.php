@@ -11,12 +11,10 @@ class PartidoController extends Controller
     {
         $query = Partido::with(['torneo', 'equipoLocal', 'equipoVisitante']);
         
-        // Filtrar por torneo
         if ($request->has('idTorneo')) {
             $query->where('idTorneo', $request->idTorneo);
         }
         
-        // Filtrar por equipo (local o visitante)
         if ($request->has('idEquipo')) {
             $query->where(function($q) use ($request) {
                 $q->where('idEquipoLocal', $request->idEquipo)
@@ -24,17 +22,14 @@ class PartidoController extends Controller
             });
         }
         
-        // Filtrar por estado
         if ($request->has('estado')) {
             $query->where('estado', $request->estado);
         }
         
-        // Filtrar por fecha
         if ($request->has('fecha')) {
             $query->whereDate('fechaHora', $request->fecha);
         }
         
-        // Filtrar partidos jugados o pendientes
         if ($request->has('jugado')) {
             if ($request->jugado === 'true' || $request->jugado === '1') {
                 $query->whereNotNull('resultadoLocal');
@@ -43,7 +38,6 @@ class PartidoController extends Controller
             }
         }
         
-        // Ordenamiento
         $sortBy = $request->get('sortBy', 'fechaHora');
         $sortOrder = $request->get('sortOrder', 'asc');
         $query->orderBy($sortBy, $sortOrder);

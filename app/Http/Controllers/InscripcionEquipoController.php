@@ -35,7 +35,6 @@ class InscripcionEquipoController extends Controller
             'montoAbonado' => ['nullable', 'numeric', 'min:0'],
         ]);
         
-        // Verificar que no exista inscripción duplicada
         $existe = InscripcionEquipo::where('idTorneo', $validated['idTorneo'])
             ->where('idEquipo', $validated['idEquipo'])
             ->exists();
@@ -47,6 +46,7 @@ class InscripcionEquipoController extends Controller
         }
         
         $inscripcion = InscripcionEquipo::create($validated);
+        $inscripcion->refresh();
         
         return response()->json($inscripcion->load(['torneo', 'equipo']), 201);
     }

@@ -22,7 +22,6 @@ class EventoPartido extends Model
         'descripcion',
     ];
     
-    // Relaciones
     public function partido(): BelongsTo
     {
         return $this->belongsTo(Partido::class, 'idPartido', 'idPartido');

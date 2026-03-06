@@ -12,14 +12,8 @@ use App\Http\Controllers\JugadorController;
 use App\Http\Controllers\PartidoController;
 use App\Http\Controllers\TorneoController;
 use App\Http\Controllers\UsuarioController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-// Rutas protegidas - requieren autenticación
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('usuarios', UsuarioController::class);
     Route::apiResource('equipos', EquipoController::class);
@@ -36,16 +30,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('eventos', EventoPartidoController::class)
         ->parameters(['eventos' => 'eventoPartido']);
     
-    // Rutas de estadísticas
     Route::get('estadisticas', [EstadisticaJugadorController::class, 'index']);
     Route::get('estadisticas/{estadisticaJugador}', [EstadisticaJugadorController::class, 'show']);
     Route::get('estadisticas/goleadores/ranking', [EstadisticaJugadorController::class, 'goleadores']);
     
-    // Rutas de fixture
     Route::post('fixture/generar', [FixtureController::class, 'generar']);
     Route::post('fixture/limpiar', [FixtureController::class, 'limpiar']);
     
-    // Rutas de dashboard
     Route::get('dashboard/resumen', [DashboardController::class, 'resumenGeneral']);
     Route::get('dashboard/resumen-movil', [DashboardController::class, 'resumenMovil']);
     Route::get('dashboard/torneo/{idTorneo}', [DashboardController::class, 'torneo']);
